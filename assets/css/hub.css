@@ -55,4 +55,4 @@
 .game-card p { font-size: 13px; color: var(--muted); line-height: 1.55; flex: 1; margin-bottom: 16px; }
 
 .hub-feedback { text-align: center; margin-top: 34px; }
-.hub-feedback p { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+.hub-feedback p { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
