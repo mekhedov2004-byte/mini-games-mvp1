@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=113474472', 'ym');
+    ym(113474472, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<!-- /Yandex.Metrika counter -->
+<title>Покер 52 — Лаборатория мини-игр · Национальная Лотерея</title>
+<link rel="stylesheet" href="assets/css/common.css">
+<link rel="stylesheet" href="assets/css/poker.css">
+</head>
+<body>
+<!-- Yandex.Metrika counter (noscript) -->
+<noscript><div><img src="https://mc.yandex.ru/watch/113474472" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter (noscript) -->
+
+<header id="nlHeader"></header>
+<nav id="nlTabs"></nav>
+
+<div class="wrap">
+
+  <!-- ==================== ИГРА ==================== -->
+  <section class="nl-view active" id="view-game">
+
+    <div class="nl-drawbar">
+      <span class="pill">Тираж <b id="pkDrawNo" class="tnum">—</b></span>
+      <span class="timer" id="pkTimerWrap">До розыгрыша: <b id="pkTimer" class="tnum">—</b></span>
+    </div>
+
+    <!-- Степпер из трёх шагов -->
+    <div class="stepper">
+      <div class="stepper-item active" data-step="1">
+        <span class="stepper-num">1</span><span class="stepper-label">Билет</span>
+      </div>
+      <span class="stepper-line"></span>
+      <div class="stepper-item" data-step="2">
+        <span class="stepper-num">2</span><span class="stepper-label">Твои карты</span>
+      </div>
+      <span class="stepper-line"></span>
+      <div class="stepper-item" data-step="3">
+        <span class="stepper-num">3</span><span class="stepper-label">Розыгрыш</span>
+      </div>
+    </div>
+
+    <!-- ---------- ЭКРАН 1: БИЛЕТ ---------- -->
+    <section class="page active" id="page1" data-screen-label="01 Билет">
+
+      <div class="felt-hero">
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-label">Цена комбинации</div>
+            <div class="hero-stat-value" id="pkHeroPrice">—</div>
+          </div>
+          <div>
+            <div class="hero-stat-label">Суперприз</div>
+            <div class="hero-stat-value gold" id="pkHeroSuper">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s1-stage">
+        <div class="s1-grid">
+
+          <!-- ЛЕВАЯ КОЛОНКА — два тура -->
+          <div>
+
+            <!-- Тур 1 -->
+            <div class="panel" id="panelMain">
+              <div class="panel-head">
+                <div class="panel-head-main">
+                  <div class="game-num">1</div>
+                  <div>
+                    <div class="panel-title">Тур 1 · Совпадения <span class="panel-tag">5 из 52</span></div>
+                    <div class="panel-sub">Выберите минимум 5 карт. Выигрыш — за совпадения с картами тиража.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="grid-meta">
+                  <div class="selected-count">
+                    Выбрано: <strong id="mainCount">0</strong> / 5
+                    <span class="extra-tag" id="mainExtraTag" style="display:none">+<span id="mainExtraNum">0</span> доп.</span>
+                  </div>
+                  <div class="grid-actions">
+                    <button class="dice-btn" id="pkMainRandom">🎲 Случайные</button>
+                    <button class="clear-btn" id="pkMainClear">✕ Сбросить</button>
+                  </div>
+                </div>
+
+                <div class="grid-wrap">
+                  <div class="grid-rank-headers">
+                    <div></div>
+                    <div>2</div><div>3</div><div>4</div><div>5</div><div>6</div>
+                    <div>7</div><div>8</div><div>9</div><div>10</div>
+                    <div>J</div><div>Q</div><div>K</div><div>A</div>
+                  </div>
+                  <div id="cardsGrid"></div>
+                </div>
+
+                <div class="add-ticket-bar">
+                  <div class="add-ticket-info" id="mainAddInfo">Выберите 5 карт, чтобы сформировать ставку</div>
+                  <button class="btn-add-ticket" id="pkMainAdd" disabled>
+                    <span class="bt-plus">+</span> Добавить билет
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Тур 2 -->
+            <div class="panel game-extra" id="panelExtra">
+              <div class="panel-head">
+                <div class="panel-head-main">
+                  <div class="game-num">2</div>
+                  <div>
+                    <div class="panel-title">Тур 2 · Комбинация <span class="panel-tag">Вслепую</span></div>
+                    <div class="panel-sub">Вам вслепую выдаётся 5 карт — они откроются после покупки. Угадайте цвет первой карты тиража, чтобы активировать выигрыш по комбинации.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="blind-stage">
+                  <div class="blind-row" id="blindRow"></div>
+                </div>
+
+                <div class="grid-meta">
+                  <div class="selected-count">
+                    Карт в руке: <strong id="blindCount">5</strong>
+                    <span class="extra-tag" id="blindExtraTag" style="display:none">+<span id="blindExtraNum">0</span> доп.</span>
+                  </div>
+                  <button class="clear-btn" id="pkBlindReset">↻ Сбросить доп.</button>
+                </div>
+
+                <div class="color-pick-section">
+                  <div class="color-pick-label"><strong>Цвет первой карты тиража.</strong> Угадаете — активируется выигрыш по покерной комбинации.</div>
+                  <div class="color-picker">
+                    <button class="color-card red" id="pkColorRed" data-color="red">
+                      <div class="check">✓</div>
+                      <div class="suits-row"><span>♥</span><span>♦</span></div>
+                      <div class="color-card-name">Красная</div>
+                    </button>
+                    <button class="color-card black" id="pkColorBlack" data-color="black">
+                      <div class="check">✓</div>
+                      <div class="suits-row"><span>♠</span><span>♣</span></div>
+                      <div class="color-card-name">Чёрная</div>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="add-ticket-bar">
+                  <div class="add-ticket-info" id="extraAddInfo">Выберите цвет, чтобы сформировать ставку</div>
+                  <button class="btn-add-ticket" id="pkExtraAdd" disabled>
+                    <span class="bt-plus">+</span> Добавить билет
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ПРАВАЯ КОЛОНКА — цена и билеты -->
+          <div class="side-stack">
+            <div class="price-card">
+              <div class="price-eyebrow">Ваши билеты · <span id="ticketsCount">0</span></div>
+              <div class="price-amount">
+                <span id="priceValue">0</span><span class="price-amount-cur"> ◆</span>
+              </div>
+              <div class="price-breakdown" id="priceBreakdown">
+                <div class="cart-empty">Сформируйте ставку в любом туре<br>и нажмите «Добавить билет»</div>
+              </div>
+              <button class="btn-pay" id="pkPay" disabled>Купить билет</button>
+              <div class="pay-hint" id="payHint">Билетов пока нет</div>
+
+              <div class="autorepeat" style="margin-top:14px">
+                <input type="checkbox" id="pkAuto">
+                <label for="pkAuto">Повторять билет каждый тираж</label>
+                <span class="left" id="pkAutoLeft"></span>
+              </div>
+            </div>
+
+            <div class="draw-meta-card">
+              <div class="draw-meta-row"><span class="draw-meta-label">Тираж</span><span class="draw-meta-val">№ <span id="pkMetaDraw">—</span></span></div>
+              <div class="draw-meta-row"><span class="draw-meta-label">До розыгрыша</span><span class="draw-meta-val" id="pkMetaTimer">—</span></div>
+              <div class="draw-meta-row"><span class="draw-meta-label">Цена комбинации</span><span class="draw-meta-val" id="pkMetaPrice">—</span></div>
+              <div class="draw-meta-row"><span class="draw-meta-label">Суперприз</span><span class="draw-meta-val" id="pkMetaSuper">—</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- ЭКРАН 2: ТВОИ КАРТЫ ---------- -->
+    <section class="page" id="page2" data-screen-label="02 Твои карты">
+      <div class="felt-bg">
+        <div class="s2-stage">
+          <span class="s2-eyebrow">Билет куплен · карты раскрыты</span>
+          <h2 class="s2-title">Твои карты</h2>
+          <p class="s2-sub" id="s2Sub">Дождитесь тиража — по таймеру откроются 5 карт розыгрыша.</p>
+
+          <!-- Тур 2: веер с комбинацией -->
+          <div id="extraReveal" style="display:none">
+            <div class="reveal-fan" id="revealFan"></div>
+            <div class="combo-result">
+              <div>
+                <div class="combo-block-label">Комбинация</div>
+                <div class="combo-name" id="comboName">—</div>
+              </div>
+              <div class="combo-divider"></div>
+              <div>
+                <div class="combo-block-label">Потенциальный выигрыш</div>
+                <div class="combo-prize" id="comboPrize">—</div>
+              </div>
+            </div>
+            <div class="color-pick-summary" id="colorPickSummary"></div>
+            <div id="extraMoreList"></div>
+          </div>
+
+          <!-- Тур 1: выбранные карты -->
+          <div class="hand-col" id="mainReveal" style="display:none">
+            <div class="hand-col-title">Твои карты — Тур 1</div>
+            <div class="mini-row" id="mainRevealRow"></div>
+            <div class="hand-col-sub">Совпадения с картами тиража приносят приз.</div>
+          </div>
+
+          <div class="pk-wait" id="pkWait">
+            <span class="pk-wait-dot"></span>
+            <span>Ожидание тиража № <b id="pkWaitDraw">—</b> · до розыгрыша <b id="pkWaitTimer" class="tnum">—</b></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- ЭКРАН 3: РОЗЫГРЫШ ---------- -->
+    <section class="page" id="page3" data-screen-label="03 Розыгрыш">
+      <div class="felt-bg">
+        <div class="s3-stage">
+          <div class="s3-head">
+            <span class="s2-eyebrow">Розыгрыш · Тираж № <span id="pkS3Draw">—</span></span>
+            <h2 class="s2-title" id="s3Title">Карты выпадают</h2>
+            <p class="s2-sub" id="s3Sub">Из колоды 52 карт по очереди открываются 5 карт.</p>
+          </div>
+
+          <div class="draw-table">
+            <div class="draw-table-label">Карты розыгрыша</div>
+            <div class="draw-row" id="drawRow">
+              <div class="dcard empty"></div>
+              <div class="dcard empty"></div>
+              <div class="dcard empty"></div>
+              <div class="dcard empty"></div>
+              <div class="dcard empty"></div>
+            </div>
+
+            <div class="first-card-banner" id="firstCardBanner"></div>
+
+            <div class="draw-divider"></div>
+
+            <div class="hand-columns" id="handColumns">
+              <div class="hand-col" id="mainHandCol">
+                <div class="hand-col-title">Твои карты — Тур 1</div>
+                <div class="mini-row" id="mainMiniRow"></div>
+                <div class="hand-col-sub">Совпадения с выпавшими картами приносят приз.</div>
+              </div>
+              <div class="hand-col" id="extraHandCol">
+                <div class="hand-col-title">Твоя рука — Тур 2</div>
+                <div class="mini-row" id="extraMiniRow"></div>
+                <div class="hand-col-sub">Комбинация активируется по угаданному цвету.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-grid" id="summaryGrid"></div>
+
+          <div class="replay-row" id="replayRow">
+            <button class="btn-secondary" id="pkReplay">Собрать новый билет</button>
+          </div>
+
+          <div class="confetti" id="confetti"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Оверлей «тасуем колоду» -->
+    <div class="pk-spin" id="spinOverlay">
+      <div class="pk-spin-box">
+        <div class="pk-spin-ring"></div>
+        <div class="pk-spin-text" id="spinText">Тасуем колоду…</div>
+        <div class="pk-spin-sub" id="spinSub">Карты розыгрыша готовятся</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ==================== КАК ИГРАТЬ ==================== -->
+  <section class="nl-view" id="view-how">
+    <div class="steps">
+      <div class="card card-pad step">
+        <div class="num">1</div>
+        <h3>Соберите билет</h3>
+        <p>Билет состоит из двух туров — можно играть в любом одном или в обоих сразу. Цена билета — <b style="color:var(--ink)">150 ◆ за каждую комбинацию</b>.</p>
+        <p style="margin-top:10px"><b style="color:var(--ink)">Тур 1.</b> Выберите 5 карт из 52 — это ваша комбинация. При желании добавьте дополнительные карты, они увеличивают ваши шансы на выигрыш.</p>
+        <p style="margin-top:10px"><b style="color:var(--ink)">Тур 2.</b> Пять карт выдаются вам вслепую, а также вы выбираете цвет первой выпавшей в ходе розыгрыша карты. Чтобы увеличить шансы на выигрыш, добавьте дополнительные карты. Ваша задача — угадать цвет карты, которая выпадет первой в основном розыгрыше, тогда вы активируете свой выигрыш по покерной комбинации.</p>
+      </div>
+      <div class="card card-pad step">
+        <div class="num">2</div>
+        <h3>После покупки</h3>
+        <p>Если вы играете во втором туре, покерная комбинация раскрывается сразу: вы видите потенциальный выигрыш, который получите, если угадаете цвет первой выпавшей карты.</p>
+        <p style="margin-top:10px">Карты первого тура остаются в билете и участвуют в основном розыгрыше.</p>
+        <p style="margin-top:10px">Дальше билет ждёт ближайшего тиража — на экране идёт обратный отсчёт.</p>
+      </div>
+      <div class="card card-pad step">
+        <div class="num">3</div>
+        <h3>Розыгрыш</h3>
+        <p>Розыгрыш проходит каждую минуту: из колоды вытаскиваются 5 карт.</p>
+        <p style="margin-top:10px">Первая выпавшая карта решает судьбу второго тура — если её цвет совпал с вашим, начисляется выигрыш по покерной комбинации.</p>
+        <p style="margin-top:10px">Все 5 выпавших карт сравниваются с картами первого тура: чем больше совпадений, тем крупнее выигрыш.</p>
+      </div>
+    </div>
+
+    <div class="card card-pad" style="margin-top:16px;font-size:13px;color:var(--muted);line-height:1.65">
+      <p>Карты тиража общие для всех игроков: один результат в минуту, одинаковый для всех билетов этого тиража. Он определяется случайно и не зависит от того, какие карты выбраны в билетах.</p>
+    </div>
+  </section>
+
+  <!-- ==================== ВЫИГРЫШИ ==================== -->
+  <section class="nl-view" id="view-prizes">
+    <div class="card card-pad">
+      <div class="block-title">Тур 1 · Совпадения · отдача 70%</div>
+      <div class="table-scroll">
+        <table class="nl-table">
+          <thead><tr><th>Совпадений с тиражом</th><th class="r">Выигрыш</th></tr></thead>
+          <tbody id="pkMatchPrizes"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card card-pad" style="margin-top:16px">
+      <div class="block-title">Тур 2 · Покерная комбинация · отдача 70%</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Выигрыш активируется только при угаданном цвете первой карты тиража.</p>
+      <div class="table-scroll">
+        <table class="nl-table">
+          <thead><tr><th>Комбинация</th><th class="r">Выигрыш</th></tr></thead>
+          <tbody id="pkComboPrizes"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== АРХИВ ТИРАЖЕЙ ==================== -->
+  <section class="nl-view" id="view-history">
+    <div class="card card-pad">
+      <div class="block-title">Цвет первой карты тиража</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Именно первая выпавшая карта решает второй тур. Вот как часто выпадал каждый цвет.</p>
+      <div id="pkFirstColorStat">
+        <span style="color:var(--faint);font-size:13px">Пока пусто — дождитесь первого розыгрыша.</span>
+      </div>
+    </div>
+
+    <div class="card card-pad" style="margin-top:16px">
+      <div class="block-title">Частота выпадения номиналов</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Сколько раз каждый номинал встретился среди выпавших карт.</p>
+      <div class="bars" id="pkRankBars"></div>
+    </div>
+  </section>
+
+</div>
+
+<footer id="nlFooter"></footer>
+
+<script src="assets/js/nl-config.js"></script>
+<script src="assets/js/nl-ab.js"></script>
+<script src="assets/js/nl-track.js"></script>
+<script src="assets/js/nl-shell.js"></script>
+<script src="assets/js/nl-draw.js"></script>
+<script src="assets/js/poker.js"></script>
+</body>
+</html>

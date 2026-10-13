@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=113474472', 'ym');
+    ym(113474472, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<!-- /Yandex.Metrika counter -->
+<title>Плинко — Лаборатория мини-игр · Национальная Лотерея</title>
+<link rel="stylesheet" href="assets/css/common.css">
+<link rel="stylesheet" href="assets/css/plinko.css">
+</head>
+<body>
+<!-- Yandex.Metrika counter (noscript) -->
+<noscript><div><img src="https://mc.yandex.ru/watch/113474472" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter (noscript) -->
+
+<header id="nlHeader"></header>
+<nav id="nlTabs"></nav>
+
+<div class="wrap">
+
+  <!-- ==================== ИГРА ==================== -->
+  <section class="nl-view active" id="view-game">
+
+    <div class="nl-drawbar">
+      <span class="pill">Тираж <b id="plDrawNo" class="tnum">—</b></span>
+      <span class="timer" id="plTimerWrap">До розыгрыша: <b id="plTimer" class="tnum">—</b></span>
+    </div>
+
+    <div class="pl-hero">
+
+      <div class="card pl-stage">
+        <div class="pl-title">ПЛИНКО</div>
+        <canvas id="board" width="600" height="620" aria-label="Доска Плинко"></canvas>
+        <div class="result-banner" id="plBanner" style="margin-top:14px;width:100%">
+          Отметьте слоты и добавьте ставку — розыгрыш пройдёт автоматически по таймеру.
+        </div>
+      </div>
+
+      <div>
+        <div class="card card-pad">
+          <div class="block-title">Выберите слоты</div>
+          <div class="slots-grid" id="plSlots"></div>
+
+          <div class="stake-row">
+            <input type="range" id="plStake" min="1" max="10" step="1" value="1" aria-label="Множитель ставки">
+            <span class="stake-val" id="plStakeVal">100 ◆ ×1 = 100 ◆</span>
+          </div>
+
+          <div class="sel-summary">
+            <span id="plSelText">Слоты не выбраны</span>
+            <span>выигрыш до <span class="win" id="plPotWin">—</span></span>
+          </div>
+
+          <button class="btn btn-primary btn-wide" id="plAddBtn" disabled>Добавить в билет</button>
+          <button class="btn btn-ghost btn-wide btn-mini" id="plRandom" style="margin-top:8px">Случайный билет</button>
+        </div>
+
+        <div class="card card-pad" style="margin-top:16px">
+          <div class="slip-head">
+            <div class="block-title" style="margin:0">Ваши билеты</div>
+            <span class="cnt" id="plSlipCnt">0 ставок</span>
+          </div>
+          <div id="plSlip"><div class="slip-empty">Билет пуст. Отметьте слоты и добавьте ставку.</div></div>
+
+          <div class="totals"><span>Сумма ставок</span><span class="v" id="plTotStake">0 ◆</span></div>
+          <div class="totals"><span>Возможный выигрыш</span><span class="v gold" id="plTotWin">0 ◆</span></div>
+
+          <div class="autorepeat">
+            <input type="checkbox" id="plAuto">
+            <label for="plAuto">Повторять билет каждый тираж</label>
+            <span class="left" id="plAutoLeft"></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== КАК ИГРАТЬ ==================== -->
+  <section class="nl-view" id="view-how">
+    <div class="steps">
+      <div class="card card-pad step">
+        <div class="num">1</div>
+        <h3>Соберите билет</h3>
+        <p>Отметьте один или несколько слотов — это ставка на то, куда упадёт шар. У каждой ставки своя цена: 100 кристаллов, умноженные на выбранный множитель. Докупать ставки можно до закрытия приёма.</p>
+      </div>
+      <div class="card card-pad step">
+        <div class="num">2</div>
+        <h3>Дождитесь тиража</h3>
+        <p>Раз в минуту приём закрывается, и генератор один раз определяет исход — целое число от 1 до 10 000 и производный от него слот. Исход единый для всех билетов тиража.</p>
+      </div>
+      <div class="card card-pad step">
+        <div class="num">3</div>
+        <h3>Шар падает</h3>
+        <p>Анимация показывает уже зафиксированный исход. Все ставки билета на выпавший слот выигрывают и умножаются на свои множители.</p>
+      </div>
+    </div>
+
+    <div class="card card-pad" style="margin-top:16px;font-size:13px;color:var(--muted);line-height:1.65">
+      <p style="margin-bottom:10px"><b style="color:var(--ink)">Исход определяется до анимации.</b> Траектория шара — способ показать готовый результат, а не способ его получить. Повлиять на падение нельзя.</p>
+      <p>Отдача составляет ровно 70% на каждом слоте: чем реже слот, тем выше множитель. Центральный слот выпадает в 35% тиражей, крайние — в одном из тысячи.</p>
+    </div>
+  </section>
+
+  <!-- ==================== ВЫИГРЫШИ ==================== -->
+  <section class="nl-view" id="view-prizes">
+    <div class="card card-pad">
+      <div class="block-title">Сетка выигрышей · отдача 70%</div>
+      <div class="table-scroll">
+        <table class="nl-table">
+          <thead><tr>
+            <th>Слот</th><th>Категория</th><th class="r">Шанс</th>
+            <th class="r">Множитель</th><th class="r">Выигрыш со 100 ◆</th>
+          </tr></thead>
+          <tbody id="plPrizes"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== АРХИВ ТИРАЖЕЙ ==================== -->
+  <section class="nl-view" id="view-history">
+    <div class="card card-pad">
+      <div class="block-title">Последние тиражи</div>
+      <div class="hist-chips" id="plHist">
+        <span style="color:var(--faint);font-size:13px">Пока пусто — дождитесь первого розыгрыша.</span>
+      </div>
+      <div class="block-title" style="margin-top:22px">Частота выпадения слотов</div>
+      <div class="bars" id="plBars"></div>
+    </div>
+  </section>
+
+</div>
+
+<footer id="nlFooter"></footer>
+
+<script src="assets/js/nl-config.js"></script>
+<script src="assets/js/nl-ab.js"></script>
+<script src="assets/js/nl-track.js"></script>
+<script src="assets/js/nl-shell.js"></script>
+<script src="assets/js/nl-draw.js"></script>
+<script src="assets/js/plinko.js"></script>
+</body>
+</html>
