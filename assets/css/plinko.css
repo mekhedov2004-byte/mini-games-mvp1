@@ -1,0 +1,73 @@
+/* ============================================================
+   plinko.css — только то, что уникально для Плинко.
+   Общее (шапка, кнопки, билет, таблицы) живёт в common.css.
+   ============================================================ */
+
+/* ---- Раскладка: сцена слева, конструктор справа ---- */
+.pl-hero {
+  display: grid; grid-template-columns: 1.15fr .85fr; gap: var(--gap);
+  align-items: start; margin-bottom: 26px;
+}
+@media (max-width: 900px) { .pl-hero { grid-template-columns: 1fr; } }
+
+/* ---- Сцена с доской: мягкое малиновое свечение, как в игровых зонах Покера ---- */
+.pl-stage {
+  padding: 16px; display: flex; flex-direction: column; align-items: center;
+  background:
+    radial-gradient(ellipse 78% 55% at 50% 42%, rgba(229,56,138,.10), transparent 70%),
+    linear-gradient(160deg, var(--panel), var(--panel-2));
+}
+.pl-title {
+  font-family: var(--font-display); font-size: 26px; font-weight: 800;
+  letter-spacing: .10em; margin: 2px 0 12px;
+  background: linear-gradient(135deg, var(--magenta-2), var(--purple-lt));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+/* Доска на canvas: тянется по ширине контейнера, высота — по пропорции.
+   Так работает и на телефоне, где 600px просто не поместятся. */
+#board { width: 100%; max-width: 600px; height: auto; display: block; touch-action: manipulation; }
+
+/* ---- Сетка слотов ---- */
+.slots-grid {
+  display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-bottom: 14px;
+  background: radial-gradient(ellipse at center, rgba(229,56,138,.06) 0%, transparent 70%);
+  padding: 10px; border-radius: var(--r-sm);
+}
+@media (max-width: 560px) { .slots-grid { grid-template-columns: repeat(5, 1fr); gap: 5px; } }
+
+.slotbtn {
+  border: 1px solid var(--line); border-radius: var(--r-sm);
+  padding: 8px 3px; text-align: center; cursor: pointer;
+  background: rgba(255,255,255,.04);
+  transition: border-color .14s, background .14s, transform .1s;
+  user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.slotbtn:active { transform: scale(.96); }
+.slotbtn .n { font-size: 11px; color: var(--muted); }
+.slotbtn .m { font-size: 14px; font-weight: 800; margin: 1px 0; font-variant-numeric: tabular-nums; }
+.slotbtn .p { font-size: 9px; color: var(--faint); }
+.slotbtn.tier-low .m { color: var(--purple-lt); }
+.slotbtn.tier-mid .m { color: var(--magenta-2); }
+.slotbtn.tier-hot .m { color: var(--gold); }
+.slotbtn.sel {
+  border-color: var(--magenta); background: rgba(229,56,138,.22);
+  box-shadow: 0 0 0 2px rgba(229,56,138,.45), 0 6px 16px rgba(229,56,138,.28);
+  transform: translateY(-2px);
+}
+
+/* ---- Селектор номинала ---- */
+.stake-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.stake-row input[type=range] { flex: 1; accent-color: var(--magenta); cursor: pointer; }
+.stake-val {
+  font-size: 13px; font-weight: 700; white-space: nowrap;
+  font-variant-numeric: tabular-nums; min-width: 128px; text-align: right;
+}
+
+.sel-summary {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; color: var(--muted); margin-bottom: 12px; gap: 10px;
+}
+.sel-summary .win { color: var(--gold); font-weight: 700; }
+
+/* ---- Гистограмма частот: 15 колонок ---- */
+#plBars .bar { min-width: 0; }
