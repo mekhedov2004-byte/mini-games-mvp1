@@ -26,6 +26,11 @@ window.NLDraw = (function () {
   const EPOCH = CFG.drawEpoch;
   const START = CFG.drawStartNo;
 
+  /* Для метрики «время до первой ставки»: каждая игра — отдельная страница,
+     поэтому момент загрузки скрипта = момент входа в игру. */
+  const openedAt = Date.now();
+  let confirmedCount = 0;
+
   /* Часы; baseNow подменяется в тестах. */
   let baseNow = () => Date.now();
   const now = () => baseNow();
@@ -128,9 +133,13 @@ window.NLDraw = (function () {
       meta: meta,
     };
     st.tickets.push(t);
+    confirmedCount++;
 
     T.send('gc_ticket_confirm', {
       ticket_id: t.id,
+      ticket_no: confirmedCount,                               // какой по счёту билет за заход в игру
+      is_first_ticket: confirmedCount === 1,
+      sec_since_open: Math.round((Date.now() - openedAt) / 1000), // время от входа в игру
       bets_count: bets.length,
       total_stake: total,
       draw_no: t.targetDraw,
