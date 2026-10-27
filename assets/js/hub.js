@@ -89,9 +89,6 @@
       T.send('gc_game_card_click', {
         picked_game: g.id, position: idx + 1, is_first_choice: first,
       }, { throttle: 0 });
-      // Цель воронки: Метрика строит цели только по имени события,
-      // поэтому выбор конкретной игры — отдельное имя.
-      T.send('fn_pick_' + g.id, { position: idx + 1, is_first_choice: first }, { throttle: 0 });
     });
 
     host.appendChild(card);

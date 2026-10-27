@@ -150,17 +150,17 @@ window.NLDraw = (function () {
     T.send('gc_draw_wait_start', { ticket_id: t.id, wait_sec: st.tleft });
 
     /* ---- цели воронки (Метрика: одна цель = одно имя события) ----
-       fn_<игра>_buy      — купил билет в этой игре
-       meta.goals         — уточняющие цели, которые знает только сама игра
-                            (тур, мультиставка, несколько слотов)
-       fn_<игра>_rebuy    — купил билет (в любой игре) после того, как досмотрел
-                            розыгрыш своего билета в <игра> в этой сессии */
+       fn_<игра>_buy    — купил билет в этой игре
+       meta.goals       — уточняющие цели, которые знает только сама игра (тур)
+       fn_<игра>_rebuy  — второй и следующие билеты в этой же игре за сессию
+       fn_both_games    — игрок покупал билеты и в Покере, и в Плинко */
     if (meta.game) {
       T.send('fn_' + meta.game + '_buy', { bets_count: bets.length, total_stake: total }, { throttle: 0 });
       (meta.goals || []).forEach(function (g) { T.send(g, {}, { throttle: 0 }); });
-      seenDraws().forEach(function (g) {
-        T.send('fn_' + g + '_rebuy', { bought_in: meta.game }, { throttle: 0 });
-      });
+      let n = 0;
+      try { n = +(sessionStorage.getItem('nl_buys:' + meta.game) || 0); sessionStorage.setItem('nl_buys:' + meta.game, String(n + 1)); } catch (e) {}
+      if (n >= 1) T.send('fn_' + meta.game + '_rebuy', { ticket_no: n + 1 }, { throttle: 0 });
+      markPlayed(meta.game);
     }
 
     if (st.hooks.onTickets) st.hooks.onTickets(st.tickets);
@@ -178,15 +178,16 @@ window.NLDraw = (function () {
     if (st.hooks.onTickets) st.hooks.onTickets(st.tickets);
   }
 
-  /* Игры, в которых игрок за эту сессию досмотрел розыгрыш своего билета.
-     sessionStorage — чтобы повторная покупка засчитывалась и в другой игре. */
-  function seenDraws() {
-    try { return JSON.parse(sessionStorage.getItem('nl_draw_seen') || '[]'); } catch (e) { return []; }
-  }
-  function markDrawSeen(game) {
+  /* Игры, в которых игрок когда-либо покупал билет (на этом устройстве).
+     Как только в списке обе игры — шлём цель «играл и в Покер, и в Плинко». */
+  function markPlayed(game) {
     try {
-      const s = seenDraws();
-      if (s.indexOf(game) < 0) { s.push(game); sessionStorage.setItem('nl_draw_seen', JSON.stringify(s)); }
+      const p = JSON.parse(localStorage.getItem('nl_played') || '[]');
+      if (p.indexOf(game) < 0) { p.push(game); localStorage.setItem('nl_played', JSON.stringify(p)); }
+      if (p.indexOf('poker') >= 0 && p.indexOf('plinko') >= 0 && sessionStorage.getItem('nl_both') !== '1') {
+        sessionStorage.setItem('nl_both', '1');
+        T.send('fn_both_games', {}, { throttle: 0 });
+      }
     } catch (e) {}
   }
 
@@ -261,15 +262,6 @@ window.NLDraw = (function () {
         is_win: r.totalPay > 0,
         payout: r.totalPay,
       }, { throttle: 0 });
-
-      /* Цель «дождался розыгрыша»: в тираже был билет игрока, и он досмотрел
-         анимацию до результата (пропущенные тиражи ниже считаются молча). */
-      const games = {};
-      r.playing.forEach(function (t) { if (t.meta && t.meta.game) games[t.meta.game] = true; });
-      Object.keys(games).forEach(function (g) {
-        T.send('fn_' + g + '_draw', { is_win: r.totalPay > 0 }, { throttle: 0 });
-        markDrawSeen(g);
-      });
 
       if (st.hooks.onResult) st.hooks.onResult({ outcome, playing: r.playing, totalPay: r.totalPay, wins: r.wins, drawNo: endedNo });
 

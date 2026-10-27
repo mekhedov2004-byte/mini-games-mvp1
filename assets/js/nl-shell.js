@@ -108,6 +108,13 @@ window.NLShell = (function () {
     if (v > state.balance) return false;
     state.balance -= v; emit();
     if (state.balance <= 0) T.send('gc_balance_depleted', { balance_left: 0 });
+    /* Цель «потратил 80% демобаланса»: осталось 20% стартового баланса или меньше.
+       Ровно в ноль баланс почти никогда не уходит — не хватает на последнюю ставку. */
+    if (state.balance <= CFG.balance.start * 0.2) {
+      let sent = false;
+      try { sent = sessionStorage.getItem('nl_bal80') === '1'; sessionStorage.setItem('nl_bal80', '1'); } catch (e) {}
+      if (!sent) T.send('fn_balance_80', { balance_left: state.balance }, { throttle: 0 });
+    }
     return true;
   }
   function award(v) { if (v > 0) { state.balance += v; emit(); } }
@@ -182,11 +189,7 @@ window.NLShell = (function () {
     document.querySelectorAll('.nl-tab').forEach(b => b.classList.toggle('active', b.dataset.view === id));
     document.querySelectorAll('.nl-view').forEach(v => v.classList.toggle('active', v.id === 'view-' + id));
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (id === 'how') {
-      T.send('gc_rules_open', { trigger: 'manual' });
-      const g = T.getContext().game_id;
-      if (g && g !== 'hub') T.send('fn_' + g + '_rules', {}, { throttle: 0 });
-    }
+    if (id === 'how') T.send('gc_rules_open', { trigger: 'manual' });
     if (onSwitch) onSwitch(id);
   }
 
