@@ -478,7 +478,17 @@
     });
     if (!bets.length) return;
 
-    const ticket = D.submitTicket(bets, { game: 'poker' });
+    /* Уточняющие цели воронки: Тур 1 (совпадения), Тур 2 (комбинация + цвет),
+       мультиставка = рука больше 5 карт (доп. карты). */
+    const goals = [];
+    const t1 = bets.filter(b => b.market === 'match');
+    const t2 = bets.filter(b => b.market === 'combo');
+    if (t1.length) goals.push('fn_poker_t1');
+    if (t1.some(b => b.hand > 5)) goals.push('fn_poker_t1_multi');
+    if (t2.length) goals.push('fn_poker_t2');
+    if (t2.some(b => b.hand > 5)) goals.push('fn_poker_t2_multi');
+
+    const ticket = D.submitTicket(bets, { game: 'poker', goals: goals });
     if (!ticket) { updatePrice(); return; }   // не хватило баланса
 
     if (ui.lastResult) {

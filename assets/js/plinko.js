@@ -153,7 +153,8 @@
       multiplier: b.mult, stake_amount: b.price, bets_in_slip: bets.length,
     }, { throttle: 0 }));
 
-    const t = D.submitTicket(bets, { game: 'plinko' });
+    // Расширенная ставка — несколько слотов в одном билете.
+    const t = D.submitTicket(bets, { game: 'plinko', goals: bets.length > 1 ? ['fn_plinko_multi'] : [] });
     if (!t) return;
 
     if (ui.lastResult) {

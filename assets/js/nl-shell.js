@@ -182,7 +182,11 @@ window.NLShell = (function () {
     document.querySelectorAll('.nl-tab').forEach(b => b.classList.toggle('active', b.dataset.view === id));
     document.querySelectorAll('.nl-view').forEach(v => v.classList.toggle('active', v.id === 'view-' + id));
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (id === 'how') T.send('gc_rules_open', { trigger: 'manual' });
+    if (id === 'how') {
+      T.send('gc_rules_open', { trigger: 'manual' });
+      const g = T.getContext().game_id;
+      if (g && g !== 'hub') T.send('fn_' + g + '_rules', {}, { throttle: 0 });
+    }
     if (onSwitch) onSwitch(id);
   }
 
@@ -226,6 +230,9 @@ window.NLShell = (function () {
     });
 
     if (window.NLAB) T.setContext(window.NLAB.assign(uid));
+
+    // Цель воронки «Вход в игру» — своё имя события на каждую игру.
+    if (opts.gameId && opts.gameId !== 'hub') T.send('fn_' + opts.gameId + '_open', {}, { throttle: 0 });
 
     renderHeader(opts);
     renderFooter();
