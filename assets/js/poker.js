@@ -7,7 +7,8 @@
   const D = window.NLDraw;
   const Archive = window.NLArchive;
   const R = window.NLRules.poker;
-  const { DECK, isRed, sameCard, shuffle, combosForHand, priceForHand, evaluateHand, bestFive, comboPayout } = R;
+  const { DECK, isRed, sameCard, shuffle, combosForHand, priceForHand,
+    evaluateHand, bestFive, comboPayout, ticketComboPayout } = R;
   const { fmt, colorName } = S;
   const $ = id => document.getElementById(id);
   const ui = { main: new Set(), blind: [], color: null, buying: false, marketSeen: new Set(),
@@ -72,21 +73,21 @@
       ['Стрит', '5♣ 6♦ 7♣ 8♠ 9♥'],
       ['Сет', '7♥ 7♣ 7♦ 4♠ A♦'],
       ['Две пары', '8♣ 8♥ J♠ J♦ A♠'],
-      ['Пара валетов и старше', 'J♣ J♥ 4♠ 6♣ K♦'],
-      ['Пара десяток и ниже', '10♠ 10♦ 3♣ 5♥ K♣'],
+      ['Пара шестёрок и старше', '6♣ 6♥ 3♠ 9♣ K♦'],
+      ['Пара пятёрок и младше', '5♠ 5♦ 3♣ 8♥ K♣'],
       ['Старшая карта', '3♣ 6♦ 8♠ J♥ A♠'],
     ].map(([name, sample]) => {
       const cards = sampleHand(sample);
       const category = evaluateHand(cards);
-      return { name, cards, category, payout: PK.comboPrizes[category] };
+      return { name, cards, category, payout: comboPayout(cards) };
     }).sort((a, b) => b.payout - a.payout);
     $('pkComboPrizes').innerHTML = examples.map(({ name, cards, category, payout }) =>
       '<tr><th scope="row">' + name + '</th><td><div class="mini-row prize-example">' +
         handHTML(cards, combinationCards(cards, category)) + '</div></td><td class="r">' + money(payout) + '</td></tr>'
     ).join('');
     $('pkMatchExample').innerHTML = handHTML(sampleHand('4♣ 7♥ 9♦ Q♠ A♣'), sampleHand('7♥ A♣'));
-    const fullHouse = sampleHand('Q♠ Q♣ Q♥ 6♦ 6♣');
-    $('pkComboExample').innerHTML = handHTML(fullHouse, fullHouse);
+    const pair = sampleHand('6♣ 6♥ 3♠ 9♣ K♦');
+    $('pkComboExample').innerHTML = handHTML(pair, combinationCards(pair, evaluateHand(pair)));
   }
 
   function markMarket(market) {
@@ -222,7 +223,7 @@
     const main = market === 'match';
     const cards = main ? [...ui.main].map(i => DECK[i]) : ui.blind.slice();
     const bet = { market, cards, price: priceForHand(cards.length), hand: cards.length };
-    if (!main) Object.assign(bet, { color: ui.color, combo: evaluateHand(cards) });
+    if (!main) Object.assign(bet, { color: ui.color, combo: evaluateHand(cards), possiblePayout: comboPayout(cards) });
     refreshPrice();
     let receipt = '';
     try {
@@ -294,7 +295,8 @@
     if (!detail) {
       const bet = ticket.bets[0];
       const best = bestFive(bet.cards);
-      detail = { best, keys: combinationCards(best.cards, best.name), possible: comboPayout(bet.cards) };
+      const possible = ticketComboPayout(bet);
+      detail = { best, keys: possible ? combinationCards(best.cards, best.name) : [], possible };
       ui.combinations.set(ticket.id, detail);
     }
     return detail;

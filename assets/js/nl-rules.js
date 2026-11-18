@@ -5,6 +5,22 @@ window.NLRules = (function () {
   const RED = new Set(PK.redSuits);
   const DECK = [];
   PK.ranks.forEach(r => PK.suits.forEach(s => DECK.push({ rank: r, suit: s })));
+  const PAIR_NAMES = [
+    'Пара двоек', 'Пара троек', 'Пара четвёрок', 'Пара пятёрок', 'Пара шестёрок',
+    'Пара семёрок', 'Пара восьмёрок', 'Пара девяток', 'Пара десяток', 'Пара валетов',
+    'Пара дам', 'Пара королей', 'Пара тузов',
+  ];
+  const pairRanks = new Map(PAIR_NAMES.map((name, i) => [name, i + 2]));
+  const comboOrder = PK.comboOrder.flatMap(name => name === 'Пара' ? PAIR_NAMES.slice().reverse() : name);
+  // Старые билеты хранили карты и цвет без суммы возможного выигрыша.
+  const legacyCombo = {
+    minPairRank: 11,
+    pairPrize: 750,
+    comboPrizes: {
+      'Роял Флеш': 3000000, 'Стрит Флеш': 200000, 'Каре': 30000, 'Фулл Хаус': 4000,
+      'Флеш': 3000, 'Стрит': 2000, 'Сет': 1000, 'Две пары': 1200, 'Старшая карта': 0,
+    },
+  };
 
   const isRed = c => RED.has(c.suit);
   const suitColor = c => isRed(c) ? 'red' : 'black';
@@ -50,7 +66,7 @@ window.NLRules = (function () {
     return out;
   }
 
-  /* Оценка ровно 5 карт → название комбинации (ключ comboPrizes) */
+  /* Оценка ровно 5 карт → название комбинации. */
   function evalFive(hand) {
     const rankVals = hand.map(c => PK.rankVal[c.rank]).sort((a, b) => a - b);
     const suits = hand.map(c => c.suit);
@@ -74,8 +90,7 @@ window.NLRules = (function () {
     if (counts[0] === 2 && counts[1] === 2) return 'Две пары';
     if (counts[0] === 2) {
       const pr = parseInt(Object.keys(rc).find(k => rc[k] === 2), 10);
-      const nm = { 14: 'Тузов', 13: 'Королей', 12: 'Дам', 11: 'Валетов' };
-      return pr >= 11 ? 'Пара ' + nm[pr] : 'Пара 10 и ниже';
+      return PAIR_NAMES[pr - 2];
     }
     return 'Старшая карта';
   }
@@ -86,7 +101,7 @@ window.NLRules = (function () {
     let bestRank = Infinity;
     allFiveSubsets(cards).forEach(sub => {
       const name = evalFive(sub);
-      const rank = PK.comboOrder.indexOf(name);
+      const rank = comboOrder.indexOf(name);
       if (rank < bestRank) {
         best = { name, cards: sub };
         bestRank = rank;
@@ -98,11 +113,16 @@ window.NLRules = (function () {
   const evaluateHand = cards => bestFive(cards).name;
 
   /* Тур 2: каждая 5-карточная комбинация руки оплачивается отдельно */
-  function comboPayout(cards) {
+  function comboPayout(cards, terms = PK) {
     let total = 0;
-    allFiveSubsets(cards).forEach(sub => { total += PK.comboPrizes[evalFive(sub)] || 0; });
+    allFiveSubsets(cards).forEach(sub => {
+      const name = evalFive(sub);
+      total += terms.comboPrizes[name] ?? (pairRanks.get(name) >= terms.minPairRank ? terms.pairPrize : 0);
+    });
     return total;
   }
+
+  const ticketComboPayout = bet => bet.possiblePayout ?? comboPayout(bet.cards, legacyCombo);
 
   /* Тур 1: n карт в руке, m совпали с картами тиража. Комбинаций ровно
      с j совпадениями = C(m,j)·C(n-m,5-j); каждая платится по таблице. */
@@ -130,7 +150,7 @@ window.NLRules = (function () {
         return { market: 'match', matches, payout: matchPayout(b.cards.length, matches) };
       }
       const colorWon = outcome.firstColor === b.color;
-      return { market: 'combo', colorWon, payout: colorWon ? comboPayout(b.cards) : 0 };
+      return { market: 'combo', colorWon, payout: colorWon ? ticketComboPayout(b) : 0 };
     });
     return { payout: perBet.reduce((sum, b) => sum + b.payout, 0), detail: { perBet } };
   }
@@ -151,7 +171,7 @@ window.NLRules = (function () {
 
   return {
     poker: { generate: pokerOutcome, resolve: pokerResult, DECK, isRed, sameCard, shuffle,
-             combosForHand, priceForHand, evaluateHand, bestFive, comboPayout },
+             combosForHand, priceForHand, evaluateHand, bestFive, comboPayout, ticketComboPayout },
     plinko: { generate: plinkoOutcome, resolve: plinkoResult },
   };
 })();
