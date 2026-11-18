@@ -312,7 +312,7 @@ window.NLShell = (function () {
     host.className = 'nl-footer';
     host.innerHTML =
       '<div class="row">' +
-        '<div>© Национальная Лотерея · демонстрационная площадка · не является публичной офертой</div>' +
+        '<div>© Национальная Лотерея · демонстрационная площадка</div>' +
         '<div style="display:flex;align-items:center;gap:10px">' +
           '<span class="age">18+</span> Играйте ответственно</div>' +
       '</div>';
