@@ -1,40 +1,98 @@
 .hub-intro {
-  text-align: center; padding: clamp(36px, 7vw, 82px) 16px clamp(32px, 5vw, 56px);
-  background: radial-gradient(ellipse at 50% 30%, #eae3fc 0%, transparent 68%);
+  position: relative; isolation: isolate; overflow: hidden;
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+  min-height: 324px; margin: 16px 0 20px; padding: 30px clamp(24px, 5vw, 64px);
+  border: 1px solid #47336c; border-radius: var(--radius);
+  background: #110922; box-shadow: 0 20px 65px #0302085e, inset 0 1px #c8a9ff26;
 }
-.hub-intro h1 { font-size: clamp(34px, 6.6vw, 69px); letter-spacing: -.055em; }
-.hub-intro p { max-width: 54ch; margin: 15px auto 0; font-size: clamp(15px, 2.1vw, 18px); color: var(--muted); }
+.hub-intro::before {
+  content: ''; position: absolute; z-index: -1; inset: 0;
+  background: url('../img/hero.jpg') right center / auto max(100%, 25vw) no-repeat;
+  mask-image: linear-gradient(90deg, transparent 40%, #000 69%);
+}
+.hub-intro h1 { font-size: clamp(37px, 5vw, 66px); line-height: .99; letter-spacing: -.055em; }
+.hub-intro h1 span { display: block; color: #c7adff; }
+.hub-intro p { max-width: 43ch; margin: 17px 0 0; color: #e0d7f4; font-size: clamp(14px, 1.5vw, 17px); }
 .hub-balance-strip {
-  display: flex; align-items: center; justify-content: center; gap: 7px;
-  width: fit-content; margin: 18px auto 0; padding: 6px 13px;
-  background: #fff; border: 1px solid var(--line); border-radius: 100px; color: var(--purple); font-size: 13px;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  width: fit-content; margin: 21px 0 0; padding: 7px 13px;
+  background: #211636; border: 1px solid #5b4285; border-radius: var(--small);
+  color: #e3d5ff; font-size: 13px;
 }
-.hub-balance-strip b { font-size: 15px; }
+.hub-balance-strip b { margin-left: 3px; font-size: 16px; color: var(--ink); }
+.hub-balance-strip [aria-hidden] { color: #bc93ff; text-shadow: 0 0 10px #a668ff; }
 .hub-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); }
 .game-card {
-  display: flex; flex-direction: column; gap: 9px; padding: 13px 13px 18px;
-  transition: box-shadow .18s ease, border-color .18s ease;
+  --tile-accent: #c8bbff;
+  --tile-line: #514088;
+  --tile-button: #291e4d;
+  position: relative; display: flex; flex-direction: column; gap: 7px; padding: 8px 8px 17px;
+  overflow: hidden; transition: box-shadow .2s ease, border-color .2s ease, transform .2s ease;
 }
-.game-card:hover { border-color: #c2b4ec; box-shadow: 0 12px 30px rgba(70, 43, 123, .12); }
-.game-card .art { display: grid; place-items: center; overflow: hidden; height: clamp(130px, 19vw, 200px); border-radius: 13px; }
-.art-plinko { background: radial-gradient(ellipse at 50% 35%, #fbf8ff, #e5dbfc); }
-.art-poker { background: radial-gradient(ellipse at 50% 35%, #fff9f6, #f4dce7); }
-.game-card .art svg { width: min(81%, 310px); height: 91%; }
-.game-card h2, .game-card p, .game-link { margin-inline: 7px; }
-.game-card h2 { margin-top: 5px; }
-.game-card p { color: var(--muted); flex: 1; max-width: 47ch; }
-.game-link { color: var(--purple); font-weight: 750; align-self: flex-start; padding-top: 3px; }
-.game-link span { margin-left: 3px; }
+.game-card:has(.art-poker) { --tile-accent: #ffc0e0; --tile-line: #73345d; --tile-button: #43203b; }
+.game-card:has(.art-plinko) { --tile-accent: #b5e7ff; --tile-line: #365883; --tile-button: #182c4b; }
+.game-card:hover {
+  transform: translateY(-3px); border-color: var(--tile-line);
+  box-shadow: 0 12px 33px #06041185, 0 0 20px color-mix(in srgb, var(--tile-line), transparent 66%);
+}
+.game-card .art {
+  display: block; overflow: hidden; height: clamp(158px, 17vw, 200px);
+  border: 1px solid var(--tile-line); border-radius: calc(var(--radius) - 7px);
+  background: #100c21;
+}
+.game-card .art img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
+.game-card .art-plinko { background: radial-gradient(ellipse at bottom, #1e125a, #100739 68%); }
+.game-card .art-plinko img {
+  width: auto; max-width: 100%; margin-inline: auto; object-fit: contain;
+  mask-image: linear-gradient(90deg, transparent, #000 19% 81%, transparent);
+}
+.game-card:hover .art img { transform: scale(1.035); }
+.game-card h2, .game-card p, .game-link { margin-inline: 12px; }
+.game-card h2 { margin-top: 6px; }
+.game-card p { flex: 1; color: var(--muted); max-width: 47ch; }
+.game-link {
+  display: inline-flex; align-items: center; gap: 14px; align-self: flex-start;
+  margin-top: 7px; padding: 7px 11px; border-radius: 8px; border: 1px solid var(--tile-line);
+  background: var(--tile-button); color: var(--tile-accent); font-size: 14px; font-weight: 750;
+}
+.game-card:hover .game-link { border-color: var(--tile-accent); }
 .hub-feedback {
   display: flex; gap: 16px; align-items: center; justify-content: space-between;
-  margin: var(--gap) 0 0; padding: 17px 22px;
-  background: var(--magenta-soft); border: 1px solid #f1dce8; border-radius: var(--radius);
+  margin: var(--gap) 0 0; padding: 17px 22px; border: 1px solid var(--line);
+  border-radius: var(--radius); background: linear-gradient(110deg, #291831, var(--panel) 70%);
 }
 .hub-feedback h2 { font-size: 20px; }
-.hub-feedback p { margin-top: 4px; color: #673f57; }
+.hub-feedback p { margin-top: 4px; color: var(--muted); }
 .hub-feedback .btn { flex-shrink: 0; }
+
+@media (max-width: 760px) {
+  .hub-intro { min-height: 320px; }
+  .hub-intro::before {
+    background-image:
+      linear-gradient(90deg, #10091f 0%, #10091f96 44%, #10091f12 100%),
+      url('../img/hero.jpg');
+    mask-image: linear-gradient(90deg, transparent 8%, #000 58%);
+  }
+}
 @media (max-width: 650px) {
+  .hub-intro { margin-top: 11px; margin-bottom: var(--gap); }
   .hub-grid { grid-template-columns: 1fr; }
-  .hub-intro { padding-inline: 0; }
+  .game-card .art { height: clamp(158px, 43vw, 245px); }
   .hub-feedback { align-items: flex-start; flex-direction: column; padding: 15px; }
+}
+@media (max-width: 480px) {
+  .hub-intro { min-height: 0; padding: 152px 19px 22px; }
+  .hub-intro::before {
+    background:
+      linear-gradient(180deg, transparent 0, #10091f16 95px, #10091f 192px),
+      url('../img/hero.jpg') right top / auto 213px no-repeat;
+    mask-image: none;
+  }
+  .game-card .art-plinko img { mask-image: none; }
+  .hub-intro h1 { font-size: clamp(34px, 9vw, 45px); }
+  .hub-intro p { margin-top: 12px; }
+  .hub-balance-strip { margin-top: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .game-card:hover, .game-card:hover .art img { transform: none; }
 }

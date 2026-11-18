@@ -105,7 +105,7 @@
       }
       ui.selected.clear();
     } catch (e) {
-      receipt = 'Не удалось сохранить билет. Попробуйте ещё раз.';
+      receipt = 'Не удалось сохранить билет. Попробуйте ещё раз';
     } finally {
       ui.buying = false;
       refresh();
@@ -145,7 +145,7 @@
       '</b></div><p>Тираж № ' + fmt(t.targetDraw) + '</p><ul class="pl-ticket-bets">' +
       t.bets.map(b => '<li><span>Слот ' + (b.slot + 1) + ' · ×' + b.mult + '</span><span>' +
         money(b.price) + '</span></li>').join('') + '</ul></article>'
-    ).join('') : '<p class="empty-state">Здесь появятся купленные билеты.</p>';
+    ).join('') : '<p class="empty-state">Здесь появятся купленные билеты</p>';
   }
 
   const board = (function () {
@@ -160,6 +160,15 @@
     const slotTop = yL(ROWS) + 14;
     const slotBottom = H - 5;
     const landingY = slotBottom - BR;
+    const frame = ctx.createLinearGradient(30, 60, W - 30, slotTop);
+    frame.addColorStop(0, '#663cdc');
+    frame.addColorStop(.44, '#75bcff');
+    frame.addColorStop(1, '#9a58ff');
+    const slotColors = P.MULT.map(mult => ({
+      hot: ['#432936', '#b58062'],
+      mid: ['#3b2350', '#98578b'],
+      low: ['#202853', '#5d65ac'],
+    })[tier(mult)]);
 
     let ball = { x: CX, y: yL(0) + 3, sy: 1 }, trail = [], landedSlot = null;
     const PEGS = [];
@@ -179,15 +188,34 @@
       const now = performance.now();
       ctx.clearRect(0, 0, W, H);
 
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(7, slotTop - 4);
+      ctx.lineTo(CX - 18, yL(0) + 7);
+      ctx.quadraticCurveTo(CX, yL(0) - 9, CX + 18, yL(0) + 7);
+      ctx.lineTo(W - 7, slotTop - 4);
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = '#9358ff28';
+      ctx.lineWidth = 12;
+      ctx.stroke();
+      ctx.strokeStyle = frame;
+      ctx.lineWidth = 1.5;
+      ctx.shadowColor = '#6a72ff';
+      ctx.shadowBlur = 8;
+      ctx.stroke();
+      ctx.restore();
+
       for (let p = 0; p < PEGS.length; p++) {
         const pg = PEGS[p], g = Math.max(0, 1 - (now - pegHit[p]) / 320);
         if (g > 0) {
-          ctx.save(); ctx.shadowColor = '#7789ec'; ctx.shadowBlur = 11 * g;
-          ctx.fillStyle = '#5059bc'; ctx.beginPath(); ctx.arc(pg.x, pg.y, PEGR + 1.8 * g, 0, 7); ctx.fill();
+          ctx.save(); ctx.shadowColor = '#80baff'; ctx.shadowBlur = 15 * g;
+          ctx.fillStyle = '#d2efff'; ctx.beginPath(); ctx.arc(pg.x, pg.y, PEGR + 1.8 * g, 0, 7); ctx.fill();
           ctx.restore();
         } else {
-          ctx.fillStyle = '#6f77c4';
+          ctx.fillStyle = '#8596df';
           ctx.beginPath(); ctx.arc(pg.x, pg.y, PEGR, 0, 7); ctx.fill();
+          ctx.fillStyle = '#c1d8ff';
+          ctx.beginPath(); ctx.arc(pg.x - .7, pg.y - .9, 1.45, 0, 7); ctx.fill();
         }
       }
 
@@ -195,24 +223,31 @@
         const x = xs(i) - SW / 2 + 1.5;
         ctx.beginPath();
         ctx.roundRect(x, slotTop, SW - 3, slotBottom - slotTop, [3, 3, 6, 6]);
-        ctx.fillStyle = i === landedSlot ? '#d8f2e6' : ui.purchased.has(i) ? '#cbbbfb' : '#eceafd';
-        ctx.strokeStyle = i === landedSlot ? '#3a8c73' : ui.purchased.has(i) ? '#6940b9' : '#a4a9d5';
+        const [fill, edge] = i === landedSlot ? ['#225b4d', '#7aebc1']
+          : ui.purchased.has(i) ? ['#532d92', '#c69cff'] : slotColors[i];
+        ctx.fillStyle = fill;
+        ctx.strokeStyle = edge;
         ctx.fill();
         ctx.stroke();
+        ctx.fillStyle = edge;
+        ctx.fillRect(x + 5, slotTop + 4, SW - 13, 1);
       });
 
       for (let t = 0; t < trail.length; t++) {
         const a = (t + 1) / trail.length;
-        ctx.fillStyle = 'rgba(255,91,166,' + (a * a * 0.5) + ')';
+        ctx.fillStyle = 'rgba(149,121,255,' + (a * a * 0.55) + ')';
         ctx.beginPath(); ctx.arc(trail[t].x, trail[t].y, BR * (0.32 + 0.5 * a), 0, 7); ctx.fill();
       }
       if (ball && isFinite(ball.x) && isFinite(ball.y)) {
         const sy = ball.sy || 1, sx = 1 / sy;
-        ctx.save(); ctx.shadowColor = '#FF5BA6'; ctx.shadowBlur = 18;
-        ctx.fillStyle = '#E5388A';
+        const light = ctx.createRadialGradient(ball.x - 3, ball.y - 4, 0, ball.x, ball.y, BR * 1.18);
+        light.addColorStop(0, '#f5faff');
+        light.addColorStop(.32, '#8adeff');
+        light.addColorStop(.65, '#9461f3');
+        light.addColorStop(1, '#502dba');
+        ctx.save(); ctx.shadowColor = '#936cff'; ctx.shadowBlur = 18;
+        ctx.fillStyle = light;
         ctx.beginPath(); ctx.ellipse(ball.x, ball.y, BR * sx, BR * sy, 0, 0, Math.PI * 2); ctx.fill();
-        ctx.shadowBlur = 0; ctx.fillStyle = '#FFD2E6';
-        ctx.beginPath(); ctx.arc(ball.x - 2.5 * sx, ball.y - 2.5 * sy, 3, 0, Math.PI * 2); ctx.fill();
         ctx.restore();
       }
     }

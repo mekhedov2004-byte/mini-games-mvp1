@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="assets/css/common.css">
 <link rel="stylesheet" href="assets/css/poker.css">
 </head>
-<body>
+<body class="poker-page">
 <!-- Yandex.Metrika counter (noscript) -->
 <noscript><div><img src="https://mc.yandex.ru/watch/113672659" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter (noscript) -->
@@ -44,7 +44,7 @@
         <section class="card card-pad poker-panel" id="panelMain">
           <header class="section-heading">
             <h2>Основная игра</h2>
-            <p>Выберите от 5 до 10 карт. Даже одно совпадение с картами тиража приносит выигрыш.</p>
+            <p>Выберите от 5 до 10 карт. Даже одно совпадение с картами тиража приносит выигрыш</p>
           </header>
           <div class="selection-toolbar">
             <span id="mainCount">Выбрано 0 из 10</span>
@@ -63,7 +63,7 @@
         <section class="card card-pad poker-panel extra-panel" id="panelExtra">
           <header class="section-heading">
             <h2>Дополнительная игра</h2>
-            <p>В билете 5 случайных карт. Можно добавить ещё до 5. Все карты откроются после покупки.</p>
+            <p>В билете 5 случайных карт. Можно добавить ещё до 5. Все карты откроются после покупки</p>
           </header>
           <div class="selection-toolbar">
             <span id="blindCount">Карт в билете: 5</span>
@@ -75,7 +75,7 @@
           <div class="blind-row" id="blindRow"></div>
           <div class="color-pick-section">
             <h3>Какого цвета будет первая карта тиража?</h3>
-            <p>Угадайте цвет, чтобы получить выигрыш за покерную комбинацию в вашем билете.</p>
+            <p>Угадайте цвет, чтобы получить выигрыш за покерную комбинацию в вашем билете</p>
             <div class="color-picker">
               <button class="color-card red" id="pkColorRed" aria-pressed="false"><span aria-hidden="true">♥ ♦</span> Красный</button>
               <button class="color-card black" id="pkColorBlack" aria-pressed="false"><span aria-hidden="true">♠ ♣</span> Чёрный</button>
@@ -93,7 +93,7 @@
         <div class="ticket-list" id="pkTickets"></div>
         <button class="btn btn-primary btn-wide" id="pkWatch" hidden>Посмотреть розыгрыш</button>
         <button class="btn btn-ghost btn-wide" id="pkLastResult" hidden>Результат прошлого тиража</button>
-        <p class="tickets-note" id="pkWatchHint" hidden>Результаты сохраняются в истории баланса.</p>
+        <p class="tickets-note" id="pkWatchHint" hidden>Результаты сохраняются в истории баланса</p>
       </aside>
     </div>
 
@@ -137,25 +137,25 @@
 
   <section class="nl-view" id="view-how">
     <header class="section-heading rules-heading"><h2>Как играть</h2>
-      <p>Выберите основную или дополнительную игру. Можно купить билеты для обеих.</p>
+      <p>Выберите основную или дополнительную игру. Можно купить билеты для обеих</p>
     </header>
     <div class="rule-grid">
       <article class="card card-pad">
         <h3>Основная игра</h3>
-        <p>Выберите от 5 до 10 карт из колоды или нажмите «Случайно». Купите билет и дождитесь тиража.</p>
+        <p>Выберите от 5 до 10 карт из колоды или нажмите «Случайно». Купите билет и дождитесь тиража</p>
         <div id="pkMatchExample" class="mini-row rule-example"></div>
-        <p><strong>Как выиграть.</strong> Вы выиграли, если ваши карты полностью или частично совпали с пятью картами, которые выпадут в ходе розыгрыша.</p>
+        <p><strong>Как выиграть.</strong> Вы выиграли, если ваши карты полностью или частично совпали с пятью картами, которые выпадут в ходе розыгрыша</p>
       </article>
       <article class="card card-pad">
         <h3>Дополнительная игра</h3>
-        <p>Вам достанутся пять случайных карт. При желании добавьте ещё до пяти. Выберите красный или чёрный цвет первой карты тиража и купите билет. Затем нажмите «Раскрыть карты», чтобы увидеть свою комбинацию.</p>
+        <p>Вам достанутся пять случайных карт. При желании добавьте ещё до пяти. Выберите красный или чёрный цвет первой карты тиража и купите билет. Затем нажмите «Раскрыть карты», чтобы увидеть свою комбинацию</p>
         <div id="pkComboExample" class="mini-row rule-example"></div>
-        <p><strong>Как выиграть.</strong> Если вы угадали цвет первой карты тиража и у вас выпала одна из выигрышных покерных комбинаций, вы выиграли.</p>
+        <p><strong>Как выиграть.</strong> Если вы угадали цвет первой карты тиража и у вас выпала одна из выигрышных покерных комбинаций, вы выиграли</p>
       </article>
     </div>
     <article class="card card-pad rules-note">
       <h3>Как проходит розыгрыш</h3>
-      <p>Раз в минуту открываются пять карт из колоды. В основной игре проверяются совпадения, а в дополнительной — цвет первой карты и комбинации в билете. В основной игре кнопка просмотра появится за 15 секунд до тиража. С дополнительным билетом можно раскрыть свои карты и дождаться розыгрыша на том же экране. Итог можно проверить в истории баланса.</p>
+      <p>Раз в минуту открываются пять карт из колоды. В основной игре проверяются совпадения, а в дополнительной — цвет первой карты и комбинации в билете. В основной игре кнопка просмотра появится за 15 секунд до тиража. С дополнительным билетом можно раскрыть свои карты и дождаться розыгрыша на том же экране. Итог можно проверить в истории баланса</p>
     </article>
     <div class="prize-grid">
       <article class="card card-pad">
@@ -169,7 +169,7 @@
       </article>
       <article class="card card-pad">
         <h3>Выигрыши в дополнительной игре</h3>
-        <p class="table-note">Суммы указаны для одной комбинации при правильно угаданном цвете.</p>
+        <p class="table-note">Суммы указаны для одной комбинации при правильно угаданном цвете</p>
         <div class="table-scroll">
           <table class="nl-table">
             <thead><tr><th scope="col">Комбинация</th><th scope="col">Пример</th><th scope="col" class="r">Выигрыш</th></tr></thead>
@@ -182,7 +182,7 @@
 
   <section class="nl-view" id="view-history">
     <header class="section-heading rules-heading"><h2>Архив тиражей</h2>
-      <p>Карты и результаты последних 10 розыгрышей.</p>
+      <p>Карты и результаты последних 10 розыгрышей</p>
     </header>
     <div class="archive-list" id="pkHistory"></div>
   </section>

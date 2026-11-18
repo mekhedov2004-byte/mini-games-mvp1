@@ -210,7 +210,7 @@
         '<div class="ticket-line"><strong>' + (main ? 'Основная игра' : 'Дополнительная игра') +
         '</strong><b>' + money(t.total) + '</b></div><p>Билет № ' + t.id + ' · тираж № ' +
         fmt(t.targetDraw) + '</p><p>' + pick + '</p>' + cards + action + '</article>';
-    }).join('') : '<p class="empty-state">Здесь появятся купленные билеты.</p>';
+    }).join('') : '<p class="empty-state">Здесь появятся купленные билеты</p>';
     updateWatch();
   }
 
@@ -240,7 +240,7 @@
       if (main) { ui.main.clear(); drawMainSelection(); }
       else resetBlind();
     } catch (e) {
-      receipt = 'Не удалось сохранить билет. Попробуйте ещё раз.';
+      receipt = 'Не удалось сохранить билет. Попробуйте ещё раз';
     } finally {
       ui.buying = false;
       refreshPrice();
@@ -259,7 +259,7 @@
     previous.hidden = !ui.lastResult || !!s.tickets.length;
     if (ui.lastResult) previous.textContent = 'Результат тиража № ' + fmt(ui.lastResult.drawNo);
     $('pkWatchHint').hidden = !s.tickets.length && !ui.lastResult;
-    $('pkWatchHint').textContent = 'Итоги прошедших тиражей доступны в архиве и истории баланса.';
+    $('pkWatchHint').textContent = 'Итоги прошедших тиражей доступны в архиве и истории баланса';
   }
 
   function setDrawPhase(title, label, sub) {
@@ -270,7 +270,7 @@
 
   function updateCountdown(screen) {
     const left = Math.max(0, Math.ceil((D.drawTime(screen.drawNo) - Date.now()) / 1000));
-    const countdown = left ? 'До начала ' + left + ' с. Карты тиража откроются по таймеру.' : 'Готовим карты тиража…';
+    const countdown = left ? 'До начала ' + left + ' с. Карты тиража откроются по таймеру' : 'Готовим карты тиража…';
     if ($('s3Sub').textContent !== countdown) $('s3Sub').textContent = countdown;
   }
 
@@ -357,7 +357,7 @@
       : 'В билете нет выигрышных комбинаций';
     verdict.innerHTML = '<div><span>Лучшая комбинация</span><strong>' + best.name +
       '</strong></div><div><span>Возможный выигрыш</span><strong>' + money(possible) +
-      '</strong></div><p>Ваш прогноз — ' + colorName(bet.color) + '. ' + condition + '.</p>';
+      '</strong></div><p>Ваш прогноз — ' + colorName(bet.color) + '. ' + condition + '</p>';
     verdict.hidden = false;
   }
 
@@ -391,16 +391,16 @@
     const result = t.detail.perBet[0];
     if (bet.market === 'match') {
       const reason = result.matches === 0
-        ? 'Ни одна из ваших карт не совпала с картами тиража.'
-        : 'Совпало карт — ' + result.matches + ' из 5.' +
-          (bet.cards.length > 5 ? ' Сумма рассчитана по всем выигрышным пятёркам билета.' : '');
+        ? 'Ни одна из ваших карт не совпала с картами тиража'
+        : 'Совпало карт — ' + result.matches + ' из 5' +
+          (bet.cards.length > 5 ? '. Сумма рассчитана по всем выигрышным пятёркам билета' : '');
       return '<p class="draw-reason">' + reason + '</p>';
     }
 
     const { best, possible } = comboDetails(t);
-    const reason = !result.colorWon ? 'Цвет не совпал.'
-      : possible ? 'Цвет угадан, выплата за выигрышные комбинации начислена.'
-        : 'Цвет угадан, но в билете нет выигрышных комбинаций.';
+    const reason = !result.colorWon ? 'Цвет не совпал'
+      : possible ? 'Цвет угадан, выплата за выигрышные комбинации начислена'
+        : 'Цвет угадан, но в билете нет выигрышных комбинаций';
     return '<p class="draw-reason">' + reason + '</p><dl class="ticket-details">' +
       '<dt>Ваш прогноз</dt><dd>' + colorName(bet.color) + '</dd>' +
       '<dt>Цвет первой карты</dt><dd>' + colorName(outcome.firstColor) + '</dd>' +
@@ -454,7 +454,7 @@
 
   function showColor(color) {
     const banner = $('firstCardBanner');
-    banner.textContent = 'Цвет первой карты — ' + colorName(color) + '. С ним сверяются все дополнительные билеты.';
+    banner.textContent = 'Цвет первой карты — ' + colorName(color) + '. С ним сверяются все дополнительные билеты';
     banner.hidden = false;
   }
 
@@ -505,7 +505,7 @@
     const main = playing.filter(t => t.bets[0].market === 'match');
     renderHands(playing);
     $('drawRow').innerHTML = outcome.cards.map(showCard).join('');
-    setDrawPhase(replay ? 'Повтор розыгрыша' : 'Идёт розыгрыш', replay ? 'Повтор' : 'Розыгрыш', 'Карты открываются по очереди.');
+    setDrawPhase(replay ? 'Повтор розыгрыша' : 'Идёт розыгрыш', replay ? 'Повтор' : 'Розыгрыш', 'Карты открываются по очереди');
     if ($('view-game').classList.contains('active')) {
       $('pkDrawStage').scrollIntoView({ block: 'nearest', behavior: reduceMotion.matches ? 'instant' : 'smooth' });
     }
