@@ -23,7 +23,7 @@
 .board-key span { width: 9px; height: 9px; border-radius: 3px; background: #b48aff; box-shadow: 0 0 7px #a56af8; }
 #plSelectedKey { color: #b8eeff; }
 #plSelectedKey span { background: #a1eaff; box-shadow: 0 0 7px #5ccfff; }
-.pl-controls { padding: clamp(14px, 2.5vw, 23px); }
+.pl-controls { padding: clamp(14px, 2.5vw, 23px); background: linear-gradient(150deg, #26304a, #1d253c 72%); }
 .pl-controls h2 { color: #e2ebff; font-size: 22px; }
 .slots-grid {
   display: grid; grid-template-columns: repeat(15, minmax(0, 1fr)); gap: 3px;
@@ -45,8 +45,8 @@
 }
 .slotbtn[aria-pressed="true"] span { color: white; }
 .slotbtn.landed { outline: 2px solid var(--green); outline-offset: -2px; }
-.stake-row { display: flex; align-items: center; gap: 9px; padding: 9px 11px; background: var(--well); border: 1px solid var(--line); border-radius: 10px; }
-.stake-row label { color: var(--muted); font-size: 13px; font-weight: 650; }
+.stake-row { display: flex; align-items: center; gap: 9px; padding: 9px 11px; background: #171f33; border: 1px solid #475b87; border-radius: 10px; }
+.stake-row label { color: #dfe7ff; font-size: 13px; font-weight: 650; }
 .stake-row input { flex: 1; min-width: 55px; margin: 0; accent-color: var(--purple); }
 .stake-row output { min-width: 65px; font-weight: 750; font-size: 14px; text-align: right; }
 .pl-actions { display: flex; gap: 7px; flex-wrap: wrap; }
@@ -60,9 +60,14 @@
 .result-banner > strong { display: block; margin-block: 3px; font-size: 19px; }
 .result-banner.win { background: var(--green-soft); }
 .result-banner.win b { color: var(--green); }
-.feedback-panel { padding-inline: 4px; }
-.feedback-panel h2 { font-size: 18px; }
+.feedback-panel { padding-inline: 2px; }
+.feedback-panel h2 { color: var(--muted); font-size: 16px; }
 .feedback-panel p { margin-top: 5px; font-size: 13px; }
+.feedback-panel .btn-feedback {
+  min-height: 40px; margin-top: 3px; padding-inline: 0; color: var(--purple);
+  background: transparent; border-color: transparent; text-decoration: underline; text-underline-offset: 4px;
+}
+.feedback-panel .btn-feedback:hover { color: var(--ink); }
 .pl-static-example { display: flex; margin-top: 9px; gap: 5px; flex-wrap: wrap; }
 .pl-static-example > * {
   padding: 4px 8px; border-radius: 7px; background: var(--soft); color: var(--purple); font-size: 13px;

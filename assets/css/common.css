@@ -162,31 +162,31 @@ button:disabled { cursor: not-allowed; }
 .nl-table .r { text-align: right; white-space: nowrap; }
 
 .tickets-heading, .ticket-line, .purchase-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.tickets-panel {
-  border-color: #3f6861; border-top: 3px solid #86cbb3;
-  background: linear-gradient(150deg, #213632, #172925 72%);
-}
-.tickets-heading { margin-bottom: 13px; padding-bottom: 11px; border-bottom: 1px solid #46695f; }
-.tickets-heading h2 { color: #dbf4ec; font-size: 21px; }
+.tickets-panel { min-width: 0; padding: 10px 2px 0; }
+.tickets-heading { margin-bottom: 8px; padding-bottom: 9px; border-bottom: 1px solid var(--line); }
+.tickets-heading h2 { color: #ddd4ed; font-size: 18px; }
 .count-badge {
-  min-width: 29px; padding: 3px 8px; text-align: center;
-  border: 1px solid #46695f; border-radius: 30px; background: #2b4741;
-  color: #c9f0e0; font-weight: 750; font-size: 13px;
+  min-width: 24px; padding: 2px 6px; text-align: center;
+  border: 1px solid var(--line); border-radius: 30px;
+  color: var(--muted); font-weight: 650; font-size: 12px;
 }
 .ticket-list { display: grid; gap: 8px; }
 .empty-state {
   color: var(--muted); font-size: 14px; padding: 15px 13px;
   border: 1px dashed #59466e; border-radius: var(--small); background: var(--well);
 }
-.tickets-panel .empty-state { color: #c8dcd5; border-color: #47695f; background: #172622; }
+.tickets-panel .empty-state { padding: 2px 0; border: 0; background: transparent; }
 .ticket-row { font-size: 13px; min-width: 0; padding: 10px 11px; border-radius: var(--small); border: 1px solid var(--line); }
 .ticket-row p { color: var(--muted); margin-top: 4px; }
 .ticket-main { background: #211932; }
-.tickets-panel .ticket-main { background: #213632; border-color: #3c5b53; }
 .ticket-extra { background: #2c182c; border-color: #54304e; }
+.tickets-panel .ticket-row {
+  padding: 5px 0 10px; border: 0; border-bottom: 1px solid var(--line);
+  border-radius: 0; background: transparent;
+}
 .ticket-line > :last-child { text-align: right; }
 .ticket-line > b { white-space: nowrap; }
-.tickets-panel .btn, .feedback-panel .btn { margin-top: 11px; }
+.tickets-panel .btn { margin-top: 11px; }
 .tickets-note { margin-top: 10px; color: var(--muted); font-size: 13px; }
 .purchase-bar { margin-top: 16px; padding-top: 13px; border-top: 1px solid var(--line); }
 .purchase-info { display: grid; color: var(--muted); font-size: 13px; }
