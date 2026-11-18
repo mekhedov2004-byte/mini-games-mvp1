@@ -1,4 +1,9 @@
-.poker-panel { scroll-margin-top: 12px; }
+.poker-panel {
+  scroll-margin-top: 12px;
+  border-color: #5d4e84; border-top: 3px solid #ac98f3;
+  background: linear-gradient(145deg, #2a2242, #211a32 65%);
+}
+.poker-panel .section-heading h2 { color: #ede4ff; }
 .selection-toolbar {
   display: flex; align-items: center; justify-content: space-between;
   gap: 8px; margin: 16px 0 9px; color: var(--muted); font-size: 13px;
@@ -32,7 +37,11 @@
 .grid-card:disabled { opacity: .48; }
 .grid-card:focus-visible { position: relative; z-index: 1; }
 
-.extra-panel { border-top-color: #84547c; background: linear-gradient(155deg, #251629, var(--panel) 45%); }
+.extra-panel {
+  border-color: #70455f; border-top-color: #e88fb6;
+  background: linear-gradient(145deg, #352339, #25182b 65%);
+}
+.extra-panel .section-heading h2 { color: #ffe1ed; }
 .blind-row, .mini-row, .draw-row, .replay-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
 .blind-row { gap: 7px; padding: 8px 0; }
 .card-back-art {

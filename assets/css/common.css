@@ -140,8 +140,12 @@ button:disabled { cursor: not-allowed; }
 
 .card { min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
 .card-pad { padding: clamp(15px, 2.5vw, 25px); }
-.play-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(275px, 320px); align-items: start; gap: var(--gap); }
-.play-main { min-width: 0; display: grid; gap: var(--gap); }
+.play-layout {
+  --play-gap: clamp(18px, 2.4vw, 28px);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(275px, 320px);
+  align-items: start; gap: var(--play-gap);
+}
+.play-main { min-width: 0; display: grid; gap: var(--play-gap); }
 .section-heading p, .rules-note p, .rule-grid p, .table-note, .feedback-panel p { color: var(--muted); margin-top: 8px; }
 .section-heading p { max-width: 66ch; }
 .rules-heading { margin: 5px 0 16px; }
@@ -158,20 +162,27 @@ button:disabled { cursor: not-allowed; }
 .nl-table .r { text-align: right; white-space: nowrap; }
 
 .tickets-heading, .ticket-line, .purchase-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.tickets-heading { margin-bottom: 15px; }
-.tickets-heading h2, .feedback-panel h2 { font-size: 21px; }
+.tickets-panel {
+  border-color: #3f6861; border-top: 3px solid #86cbb3;
+  background: linear-gradient(150deg, #213632, #172925 72%);
+}
+.tickets-heading { margin-bottom: 13px; padding-bottom: 11px; border-bottom: 1px solid #46695f; }
+.tickets-heading h2 { color: #dbf4ec; font-size: 21px; }
 .count-badge {
   min-width: 29px; padding: 3px 8px; text-align: center;
-  border-radius: 30px; background: var(--soft); color: var(--purple); font-weight: 750; font-size: 13px;
+  border: 1px solid #46695f; border-radius: 30px; background: #2b4741;
+  color: #c9f0e0; font-weight: 750; font-size: 13px;
 }
 .ticket-list { display: grid; gap: 8px; }
 .empty-state {
   color: var(--muted); font-size: 14px; padding: 15px 13px;
   border: 1px dashed #59466e; border-radius: var(--small); background: var(--well);
 }
+.tickets-panel .empty-state { color: #c8dcd5; border-color: #47695f; background: #172622; }
 .ticket-row { font-size: 13px; min-width: 0; padding: 10px 11px; border-radius: var(--small); border: 1px solid var(--line); }
 .ticket-row p { color: var(--muted); margin-top: 4px; }
 .ticket-main { background: #211932; }
+.tickets-panel .ticket-main { background: #213632; border-color: #3c5b53; }
 .ticket-extra { background: #2c182c; border-color: #54304e; }
 .ticket-line > :last-child { text-align: right; }
 .ticket-line > b { white-space: nowrap; }

@@ -1,7 +1,7 @@
-.pl-stage { overflow: hidden; }
+.pl-stage { overflow: hidden; border-color: #4b6089; border-top: 3px solid #91b1f8; background: #1e253b; }
 .board-art {
   display: grid; place-items: center; padding: 14px 13px 10px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid #43557c;
   background:
     radial-gradient(ellipse at 50% 74%, #283367 0%, transparent 64%),
     radial-gradient(ellipse at 50% 0%, #33204d 0%, #15102d 64%, #0f0c20);
@@ -24,7 +24,7 @@
 #plSelectedKey { color: #b8eeff; }
 #plSelectedKey span { background: #a1eaff; box-shadow: 0 0 7px #5ccfff; }
 .pl-controls { padding: clamp(14px, 2.5vw, 23px); }
-.pl-controls h2 { font-size: 22px; }
+.pl-controls h2 { color: #e2ebff; font-size: 22px; }
 .slots-grid {
   display: grid; grid-template-columns: repeat(15, minmax(0, 1fr)); gap: 3px;
   max-width: 600px; margin: 11px auto 14px;
@@ -60,7 +60,9 @@
 .result-banner > strong { display: block; margin-block: 3px; font-size: 19px; }
 .result-banner.win { background: var(--green-soft); }
 .result-banner.win b { color: var(--green); }
-.feedback-panel { background: linear-gradient(145deg, #2b182d, var(--panel) 80%); border-color: #50344f; }
+.feedback-panel { padding-inline: 4px; }
+.feedback-panel h2 { font-size: 18px; }
+.feedback-panel p { margin-top: 5px; font-size: 13px; }
 .pl-static-example { display: flex; margin-top: 9px; gap: 5px; flex-wrap: wrap; }
 .pl-static-example > * {
   padding: 4px 8px; border-radius: 7px; background: var(--soft); color: var(--purple); font-size: 13px;

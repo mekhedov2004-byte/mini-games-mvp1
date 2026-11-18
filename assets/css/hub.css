@@ -58,8 +58,8 @@
 .game-card:hover .game-link { border-color: var(--tile-accent); }
 .hub-feedback {
   display: flex; gap: 16px; align-items: center; justify-content: space-between;
-  margin: var(--gap) 0 0; padding: 17px 22px; border: 1px solid var(--line);
-  border-radius: var(--radius); background: linear-gradient(110deg, #291831, var(--panel) 70%);
+  margin-top: clamp(24px, 3vw, 36px); padding-top: 16px;
+  border-top: 1px solid var(--line);
 }
 .hub-feedback h2 { font-size: 20px; }
 .hub-feedback p { margin-top: 4px; color: var(--muted); }
@@ -78,7 +78,7 @@
   .hub-intro { margin-top: 11px; margin-bottom: var(--gap); }
   .hub-grid { grid-template-columns: 1fr; }
   .game-card .art { height: clamp(158px, 43vw, 245px); }
-  .hub-feedback { align-items: flex-start; flex-direction: column; padding: 15px; }
+  .hub-feedback { align-items: flex-start; flex-direction: column; gap: 12px; }
 }
 @media (max-width: 480px) {
   .hub-intro { min-height: 0; padding: 152px 19px 22px; }
