@@ -18,6 +18,7 @@
 <title>Плинко — Лаборатория мини-игр · Национальная Лотерея</title>
 <link rel="stylesheet" href="assets/css/common.css">
 <link rel="stylesheet" href="assets/css/plinko.css">
+<link rel="stylesheet" href="assets/css/archive.css">
 </head>
 <body class="plinko-page">
 <!-- Yandex.Metrika counter (noscript) -->
@@ -124,9 +125,24 @@
   </section>
 
   <section class="nl-view" id="view-history">
-    <header class="section-heading rules-heading"><h2>Архив тиражей</h2>
-      <p>Выпавшие слоты и результаты последних 10 розыгрышей</p>
-    </header>
+    <header class="rules-heading"><h2>Архив тиражей</h2></header>
+    <article class="card card-pad archive-visuals archive-visuals-plinko" id="plArchiveVisuals" hidden>
+      <div class="archive-chart-heading">
+        <div>
+          <h3>Выпавшие слоты</h3>
+          <p>От новых тиражей к старым</p>
+        </div>
+        <span class="archive-sample" id="plArchiveSample"></span>
+      </div>
+      <ol class="archive-recent" id="plArchiveRecent" aria-label="Слоты последних тиражей"></ol>
+      <div class="archive-chart-divider">
+        <h3>Частота выпадения слотов</h3>
+        <p class="archive-axis-label">Число выпадений</p>
+        <div id="plArchivePlot"></div>
+      </div>
+    </article>
+    <p class="empty-state archive-visuals" id="plArchiveEmpty" hidden>Статистика появится после первого тиража</p>
+    <h3 class="archive-list-title">Последние 10 тиражей</h3>
     <div class="archive-list" id="plHist"></div>
   </section>
 </main>
@@ -139,6 +155,7 @@
 <script src="assets/js/nl-shell.js"></script>
 <script src="assets/js/nl-rules.js"></script>
 <script src="assets/js/nl-draw.js"></script>
+<script src="assets/js/nl-archive.js"></script>
 <script src="assets/js/plinko.js"></script>
 </body>
 </html>

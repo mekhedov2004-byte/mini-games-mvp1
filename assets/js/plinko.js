@@ -5,6 +5,7 @@
   const T = window.NLTrack;
   const S = window.NLShell;
   const D = window.NLDraw;
+  const Archive = window.NLArchive;
   const { fmt } = S;
   const $ = id => document.getElementById(id);
   const NSLOT = P.MULT.length;
@@ -377,8 +378,23 @@
   }
 
   function renderHistory() {
+    const history = D.history;
+    $('plArchiveVisuals').hidden = !history.length;
+    $('plArchiveEmpty').hidden = !!history.length;
+    if (history.length) {
+      const counts = Array(NSLOT).fill(0);
+      $('plArchiveSample').textContent = Archive.drawCount(history.length);
+      $('plArchiveRecent').innerHTML = history.map(({ slot, drawNo }) => {
+        counts[slot]++;
+        const mult = P.MULT[slot];
+        const label = 'Тираж № ' + fmt(drawNo) + ' · слот ' + (slot + 1) + ' · ×' + mult;
+        return '<li class="slot-result tier-' + tier(mult) + '" title="' + label +
+          '" aria-label="' + label + '">' + (slot + 1) + '</li>';
+      }).join('');
+      Archive.renderColumns($('plArchivePlot'), P.MULT.map((_, i) => i + 1), counts, 'Слот');
+    }
     const tickets = S.getTickets('plinko');
-    $('plHist').innerHTML = D.history.map(o => {
+    $('plHist').innerHTML = history.slice(0, 10).map(o => {
       const { bets, wins } = resultStats(tickets.filter(t => t.targetDraw === o.drawNo && t.resolved));
       return '<article class="card archive-row"><div><h3>Тираж № ' + fmt(o.drawNo) + '</h3><time>' +
         S.dateTime.format(D.drawTime(o.drawNo)) + '</time></div><div class="slot-result tier-' + tier(P.MULT[o.slot]) +
@@ -394,6 +410,7 @@
 
   D.init({
     gameId: 'plinko',
+    historyLimit: 20,
     outcomeLabel: o => 'slot_' + (o.slot + 1),
     onTick(s) {
       $('plDrawNo').textContent = fmt(s.drawNo);

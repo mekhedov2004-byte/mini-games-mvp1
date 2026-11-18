@@ -5,6 +5,7 @@
   const T = window.NLTrack;
   const S = window.NLShell;
   const D = window.NLDraw;
+  const Archive = window.NLArchive;
   const R = window.NLRules.poker;
   const { DECK, isRed, sameCard, shuffle, combosForHand, priceForHand, evaluateHand, bestFive, comboPayout } = R;
   const { fmt, colorName } = S;
@@ -31,6 +32,7 @@
   const suitNames = { '♠': 'пики', '♣': 'трефы', '♥': 'червы', '♦': 'бубны' };
   const cardName = c => c.rank + ', ' + suitNames[c.suit];
   const money = amount => fmt(amount) + ' ◆';
+  const formatPercent = new Intl.NumberFormat('ru-RU', { style: 'percent', maximumFractionDigits: 1 });
 
   function miniCard(card, highlighted = false, first = false) {
     return '<span class="mini-card' + (isRed(card) ? ' red' : '') + (highlighted ? ' matched' : '') +
@@ -533,9 +535,34 @@
     }
   }
 
+  function renderArchiveCharts(history) {
+    $('pkArchiveVisuals').hidden = !history.length;
+    $('pkArchiveEmpty').hidden = !!history.length;
+    if (!history.length) return;
+
+    let red = 0, totalCards = 0;
+    const counts = new Map(PK.ranks.map(rank => [rank, 0]));
+    for (const draw of history) {
+      if (draw.firstColor === 'red') red++;
+      for (const card of draw.cards) counts.set(card.rank, counts.get(card.rank) + 1);
+      totalCards += draw.cards.length;
+    }
+    $('pkArchiveSample').textContent = 'В выборке ' + Archive.drawCount(history.length);
+    $('pkArchiveCards').textContent = fmt(totalCards) + ' карт';
+    for (const [id, count] of [['pkArchiveRed', red], ['pkArchiveBlack', history.length - red]]) {
+      const row = $(id);
+      const share = count / history.length;
+      row.style.setProperty('--share', share * 100 + '%');
+      row.querySelector('.archive-color-value').textContent = count + ' из ' + history.length + ' · ' + formatPercent.format(share);
+    }
+    Archive.renderColumns($('pkArchivePlot'), PK.ranks, PK.ranks.map(rank => counts.get(rank)), 'Номинал');
+  }
+
   function renderHistory() {
+    const history = D.history;
+    renderArchiveCharts(history);
     const mine = S.getTickets('poker');
-    $('pkHistory').innerHTML = D.history.map(o => {
+    $('pkHistory').innerHTML = history.slice(0, 10).map(o => {
       const playing = mine.filter(t => t.targetDraw === o.drawNo && t.resolved);
       const won = playing.filter(t => t.payout > 0).length;
       const personal = playing.length ? 'Ваши билеты: ' + playing.length + ' · выиграли: ' + won : 'Ваших билетов в тираже нет';
@@ -656,6 +683,7 @@
 
   D.init({
     gameId: 'poker',
+    historyLimit: 30,
     outcomeLabel: o => 'first_' + o.firstColor,
     onTick(s) {
       $('pkDrawNo').textContent = fmt(s.drawNo);

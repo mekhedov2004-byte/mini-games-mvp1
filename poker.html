@@ -18,6 +18,7 @@
 <title>Покер 52 — Лаборатория мини-игр · Национальная Лотерея</title>
 <link rel="stylesheet" href="assets/css/common.css">
 <link rel="stylesheet" href="assets/css/poker.css">
+<link rel="stylesheet" href="assets/css/archive.css">
 </head>
 <body class="poker-page">
 <!-- Yandex.Metrika counter (noscript) -->
@@ -181,9 +182,37 @@
   </section>
 
   <section class="nl-view" id="view-history">
-    <header class="section-heading rules-heading"><h2>Архив тиражей</h2>
-      <p>Карты и результаты последних 10 розыгрышей</p>
-    </header>
+    <header class="rules-heading"><h2>Архив тиражей</h2></header>
+    <div class="archive-visuals archive-visuals-poker" id="pkArchiveVisuals" hidden>
+      <article class="card card-pad archive-color-card">
+        <div class="archive-chart-heading">
+          <div>
+            <h3>Цвет первой карты</h3>
+            <p id="pkArchiveSample"></p>
+          </div>
+        </div>
+        <div class="archive-color red" id="pkArchiveRed">
+          <span class="archive-color-label"><span aria-hidden="true">♥ ♦</span> Красная</span>
+          <strong class="archive-color-value"></strong>
+          <div class="archive-color-track" aria-hidden="true"><span></span></div>
+        </div>
+        <div class="archive-color black" id="pkArchiveBlack">
+          <span class="archive-color-label"><span aria-hidden="true">♠ ♣</span> Чёрная</span>
+          <strong class="archive-color-value"></strong>
+          <div class="archive-color-track" aria-hidden="true"><span></span></div>
+        </div>
+      </article>
+      <article class="card card-pad archive-rank-card">
+        <div class="archive-chart-heading">
+          <h3>Частота выпадения номиналов</h3>
+          <span class="archive-sample" id="pkArchiveCards"></span>
+        </div>
+        <p class="archive-axis-label">Число карт</p>
+        <div id="pkArchivePlot"></div>
+      </article>
+    </div>
+    <p class="empty-state archive-visuals" id="pkArchiveEmpty" hidden>Статистика появится после первого тиража</p>
+    <h3 class="archive-list-title">Последние 10 тиражей</h3>
     <div class="archive-list" id="pkHistory"></div>
   </section>
 </main>
@@ -196,6 +225,7 @@
 <script src="assets/js/nl-shell.js"></script>
 <script src="assets/js/nl-rules.js"></script>
 <script src="assets/js/nl-draw.js"></script>
+<script src="assets/js/nl-archive.js"></script>
 <script src="assets/js/poker.js"></script>
 </body>
 </html>

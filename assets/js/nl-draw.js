@@ -47,7 +47,7 @@ window.NLDraw = (function () {
 
   function refreshHistory() {
     state.history = hooks.gameId
-      ? Array.from({ length: Math.min(10, Math.max(0, state.drawNo - START)) },
+      ? Array.from({ length: Math.min(hooks.historyLimit ?? 10, Math.max(0, state.drawNo - START)) },
           (_, i) => outcomeFor(hooks.gameId, state.drawNo - 1 - i))
       : [];
   }
