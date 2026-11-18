@@ -1,58 +1,40 @@
-/* ============================================================
-   hub.css — главная страница выбора игры
-   ============================================================ */
-
-.hub-intro { text-align: center; padding: 26px 0 30px; }
-.hub-intro h1 {
-  font-family: var(--font-display); font-size: 34px; font-weight: 800;
-  letter-spacing: .01em; margin-bottom: 12px;
-  background: linear-gradient(135deg, var(--magenta-2), var(--purple-lt));
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+.hub-intro {
+  text-align: center; padding: clamp(36px, 7vw, 82px) 16px clamp(32px, 5vw, 56px);
+  background: radial-gradient(ellipse at 50% 30%, #eae3fc 0%, transparent 68%);
 }
-.hub-intro p { font-size: 15px; color: var(--muted); max-width: 620px; margin: 0 auto; line-height: 1.6; }
-@media (max-width: 560px) { .hub-intro h1 { font-size: 25px; } .hub-intro p { font-size: 14px; } }
-
+.hub-intro h1 { font-size: clamp(34px, 6.6vw, 69px); letter-spacing: -.055em; }
+.hub-intro p { max-width: 54ch; margin: 15px auto 0; font-size: clamp(15px, 2.1vw, 18px); color: var(--muted); }
 .hub-balance-strip {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  margin: 18px auto 0; font-size: 13px; color: var(--muted);
-  background: rgba(255,255,255,.05); border: 1px solid var(--line);
-  border-radius: 999px; padding: 8px 16px; width: fit-content;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  width: fit-content; margin: 18px auto 0; padding: 6px 13px;
+  background: #fff; border: 1px solid var(--line); border-radius: 100px; color: var(--purple); font-size: 13px;
 }
-.hub-balance-strip b { color: var(--gold); font-variant-numeric: tabular-nums; }
-
-.hub-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap); }
-@media (max-width: 760px) { .hub-grid { grid-template-columns: 1fr; } }
-
+.hub-balance-strip b { font-size: 15px; }
+.hub-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); }
 .game-card {
-  display: flex; flex-direction: column; padding: 22px;
-  cursor: pointer; text-align: left;
-  transition: transform .15s, border-color .15s, box-shadow .15s;
+  display: flex; flex-direction: column; gap: 9px; padding: 13px 13px 18px;
+  transition: box-shadow .18s ease, border-color .18s ease;
 }
-.game-card:hover {
-  transform: translateY(-3px); border-color: var(--magenta);
-  box-shadow: var(--sh-card), 0 8px 30px rgba(229,56,138,.20);
+.game-card:hover { border-color: #c2b4ec; box-shadow: 0 12px 30px rgba(70, 43, 123, .12); }
+.game-card .art { display: grid; place-items: center; overflow: hidden; height: clamp(130px, 19vw, 200px); border-radius: 13px; }
+.art-plinko { background: radial-gradient(ellipse at 50% 35%, #fbf8ff, #e5dbfc); }
+.art-poker { background: radial-gradient(ellipse at 50% 35%, #fff9f6, #f4dce7); }
+.game-card .art svg { width: min(81%, 310px); height: 91%; }
+.game-card h2, .game-card p, .game-link { margin-inline: 7px; }
+.game-card h2 { margin-top: 5px; }
+.game-card p { color: var(--muted); flex: 1; max-width: 47ch; }
+.game-link { color: var(--purple); font-weight: 750; align-self: flex-start; padding-top: 3px; }
+.game-link span { margin-left: 3px; }
+.hub-feedback {
+  display: flex; gap: 16px; align-items: center; justify-content: space-between;
+  margin: var(--gap) 0 0; padding: 17px 22px;
+  background: var(--magenta-soft); border: 1px solid #f1dce8; border-radius: var(--radius);
 }
-
-.game-card .art {
-  height: 132px; border-radius: var(--r-sm); margin-bottom: 16px;
-  display: flex; align-items: center; justify-content: center;
-  position: relative; overflow: hidden;
-  background: linear-gradient(140deg, rgba(229,56,138,.20), rgba(127,119,221,.18));
-  border: 1px solid var(--line);
-  box-shadow: inset 0 -34px 46px rgba(229,56,138,.12);
+.hub-feedback h2 { font-size: 20px; }
+.hub-feedback p { margin-top: 4px; color: #673f57; }
+.hub-feedback .btn { flex-shrink: 0; }
+@media (max-width: 650px) {
+  .hub-grid { grid-template-columns: 1fr; }
+  .hub-intro { padding-inline: 0; }
+  .hub-feedback { align-items: flex-start; flex-direction: column; padding: 15px; }
 }
-.game-card .art svg { width: 100%; height: 100%; }
-
-.game-card .badge {
-  position: absolute; top: 10px; right: 10px;
-  font-size: 11px; font-weight: 700; color: var(--gold);
-  background: rgba(11,7,38,.75); border: 1px solid rgba(255,200,61,.4);
-  border-radius: 999px; padding: 3px 10px;
-}
-
-.game-card h2 { font-family: var(--font-display); font-size: 21px; margin-bottom: 4px; }
-.game-card .tagline { font-size: 12px; color: var(--magenta-2); margin-bottom: 10px; font-weight: 600; }
-.game-card p { font-size: 13px; color: var(--muted); line-height: 1.55; flex: 1; margin-bottom: 16px; }
-
-.hub-feedback { text-align: center; margin-top: 34px; }
-.hub-feedback p { font-size: 13px; color: var(--muted); margin-bottom: 24px; }

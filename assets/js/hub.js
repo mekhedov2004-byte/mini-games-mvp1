@@ -11,7 +11,8 @@
   const T = window.NLTrack;
   const S = window.NLShell;
 
-  const shell = S.init({ gameId: 'hub' });
+  S.init({ gameId: 'hub' });
+  window.NLDraw.init();
 
   /* Порядок фиксируется на сессию: внутри одного визита карточки
      не должны прыгать — иначе игрок решит, что страница сломана. */
@@ -45,10 +46,10 @@
           let s = '';
           for (let r = 0; r < 5; r++)
             for (let i = 0; i <= r; i++)
-              s += '<circle cx="' + (100 + (i - r / 2) * 22) + '" cy="' + (22 + r * 17) + '" r="3" fill="rgba(206,203,246,.55)"/>';
+              s += '<circle cx="' + (100 + (i - r / 2) * 22) + '" cy="' + (22 + r * 17) + '" r="3" fill="#7774c4"/>';
           for (let i = 0; i < 7; i++)
             s += '<rect x="' + (32 + i * 20) + '" y="106" width="16" height="10" rx="3" fill="' +
-                 (i === 3 ? 'rgba(127,119,221,.35)' : i === 0 || i === 6 ? 'rgba(255,200,61,.35)' : 'rgba(255,91,166,.25)') + '"/>';
+                 (i === 3 ? '#a6a5ed' : i === 0 || i === 6 ? '#ecac74' : '#e68cb8') + '"/>';
           return s;
         })() +
         '<circle cx="100" cy="12" r="7" fill="#E5388A"/><circle cx="97.5" cy="9.5" r="2.4" fill="#FFD2E6"/>' +
@@ -71,12 +72,10 @@
     card.className = 'card game-card';
     card.href = g.href;
     card.innerHTML =
-      '<div class="art">' + (ART[g.id] || '') +
-        (g.badge ? '<span class="badge">' + g.badge + '</span>' : '') + '</div>' +
+      '<div class="art art-' + g.id + '" aria-hidden="true">' + ART[g.id] + '</div>' +
       '<h2>' + g.title + '</h2>' +
-      '<div class="tagline">' + g.tagline + '</div>' +
       '<p>' + g.description + '</p>' +
-      '<span class="btn btn-primary btn-wide" style="text-align:center">Играть</span>';
+      '<span class="game-link">Играть <span aria-hidden="true">→</span></span>';
 
     card.addEventListener('click', function () {
       let first = false;

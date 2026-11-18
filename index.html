@@ -26,30 +26,24 @@
 
 <header id="nlHeader"></header>
 
-<div class="wrap">
-
-  <div class="hub-intro">
+<main class="wrap hub">
+  <section class="hub-intro">
     <h1>Лаборатория мини-игр</h1>
-    <p>Мы пробуем новые игровые механики и хотим понять, какие из них интересны.
-       Все игры здесь бесплатные: вы получаете демонстрационный баланс в кристаллах,
-       выигрыши на него тоже в кристаллах. Играйте, а потом расскажите, что понравилось.</p>
-    <div class="hub-balance-strip">
-      Ваш демобаланс: <b id="hubBalance" class="tnum">—</b> кристаллов
-      <span style="color:var(--faint)">·</span>
-      <span style="color:var(--faint)">пополняется раз в сутки</span>
-    </div>
-  </div>
+    <p>Попробуйте Покер 52 и Плинко бесплатно. Билеты и выигрыши здесь в кристаллах, а демобаланс пополняется каждый день.</p>
+    <div class="hub-balance-strip"><span>Ваш демобаланс</span><b id="hubBalance" class="tnum">—</b><span aria-hidden="true">◆</span></div>
+  </section>
 
   <div class="hub-grid" id="hubGrid"></div>
 
-  <div class="hub-feedback">
-    <p>Уже поиграли? Оцените новые игры — ваше мнение поможет сделать игры удобнее и интереснее (рекомендуем отлючить VPN, с ним опрос может не загрузится)</p>
-    <!-- Ведёт на внешний опросник; адрес берётся из NL_CONFIG.links.survey (hub.js) -->
-    <a class="btn btn-ghost" id="hubFeedback" target="_blank" rel="noopener"
+  <section class="hub-feedback">
+    <div>
+      <h2>Уже поиграли?</h2>
+      <p>Расскажите, что можно улучшить. Перед открытием опроса отключите VPN.</p>
+    </div>
+    <a class="btn btn-feedback" id="hubFeedback" target="_blank" rel="noopener"
        data-track="gc_survey_open" data-track-params='{"entry_point":"hub"}'>Оценить игры</a>
-  </div>
-
-</div>
+  </section>
+</main>
 
 <footer id="nlFooter"></footer>
 
@@ -57,6 +51,8 @@
 <script src="assets/js/nl-ab.js"></script>
 <script src="assets/js/nl-track.js"></script>
 <script src="assets/js/nl-shell.js"></script>
+<script src="assets/js/nl-rules.js"></script>
+<script src="assets/js/nl-draw.js"></script>
 <script src="assets/js/hub.js"></script>
 </body>
 </html>

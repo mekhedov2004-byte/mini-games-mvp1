@@ -1,73 +1,69 @@
-/* ============================================================
-   plinko.css — только то, что уникально для Плинко.
-   Общее (шапка, кнопки, билет, таблицы) живёт в common.css.
-   ============================================================ */
-
-/* ---- Раскладка: сцена слева, конструктор справа ---- */
-.pl-hero {
-  display: grid; grid-template-columns: 1.15fr .85fr; gap: var(--gap);
-  align-items: start; margin-bottom: 26px;
+.pl-stage { overflow: hidden; }
+.board-art {
+  display: grid; place-items: center; padding: 14px 13px 10px;
+  background: radial-gradient(ellipse at 50% 56%, #faf7ff, #eee9fc 72%, #e6def8);
 }
-@media (max-width: 900px) { .pl-hero { grid-template-columns: 1fr; } }
-
-/* ---- Сцена с доской: мягкое малиновое свечение, как в игровых зонах Покера ---- */
-.pl-stage {
-  padding: 16px; display: flex; flex-direction: column; align-items: center;
-  background:
-    radial-gradient(ellipse 78% 55% at 50% 42%, rgba(229,56,138,.10), transparent 70%),
-    linear-gradient(160deg, var(--panel), var(--panel-2));
+#board { width: 100%; max-width: 600px; height: auto; display: block; }
+.board-slots {
+  display: grid; grid-template-columns: repeat(15, minmax(0, 1fr));
+  width: min(100%, 600px); margin: 0; padding: 0; list-style: none;
+  color: #454b86; font-size: clamp(10px, 2vw, 13px); font-weight: 700; text-align: center;
+  font-variant-numeric: tabular-nums;
 }
-.pl-title {
-  font-family: var(--font-display); font-size: 26px; font-weight: 800;
-  letter-spacing: .10em; margin: 2px 0 12px;
-  background: linear-gradient(135deg, var(--magenta-2), var(--purple-lt));
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-/* Доска на canvas: тянется по ширине контейнера, высота — по пропорции.
-   Так работает и на телефоне, где 600px просто не поместятся. */
-#board { width: 100%; max-width: 600px; height: auto; display: block; touch-action: manipulation; }
-
-/* ---- Сетка слотов ---- */
+.board-slots li { line-height: 1.65; margin-inline: 2px; border-radius: 5px; }
+.board-slots .purchased { background: #6840b5; color: white; }
+.board-slots .landed { background: #166951; color: white; }
+.board-slots .purchased.landed { outline: 2px solid #6840b5; outline-offset: 1px; }
+.board-key { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 6px; color: #503684; font-size: 12px; font-weight: 650; }
+.board-key span { width: 9px; height: 9px; border-radius: 3px; background: #6840b5; }
+.pl-controls { padding: clamp(14px, 2.5vw, 23px); }
+.pl-controls h2 { font-size: 22px; }
 .slots-grid {
-  display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-bottom: 14px;
-  background: radial-gradient(ellipse at center, rgba(229,56,138,.06) 0%, transparent 70%);
-  padding: 10px; border-radius: var(--r-sm);
+  display: grid; grid-template-columns: repeat(15, minmax(0, 1fr)); gap: 3px;
+  max-width: 600px; margin: 11px auto 14px;
 }
-@media (max-width: 560px) { .slots-grid { grid-template-columns: repeat(5, 1fr); gap: 5px; } }
-
-.slotbtn {
-  border: 1px solid var(--line); border-radius: var(--r-sm);
-  padding: 8px 3px; text-align: center; cursor: pointer;
-  background: rgba(255,255,255,.04);
-  transition: border-color .14s, background .14s, transform .1s;
-  user-select: none; -webkit-tap-highlight-color: transparent;
+.slotbtn, .slot-result {
+  display: grid; place-items: center; gap: 2px; min-width: 0; min-height: 48px; line-height: 1.1;
+  border-radius: 7px; border: 1px solid #ded6f1; padding: 3px 0; text-align: center;
+  background: #f4f0fc; color: #493d91; font-size: 13px;
 }
-.slotbtn:active { transform: scale(.96); }
-.slotbtn .n { font-size: 11px; color: var(--muted); }
-.slotbtn .m { font-size: 14px; font-weight: 800; margin: 1px 0; font-variant-numeric: tabular-nums; }
-.slotbtn .p { font-size: 9px; color: var(--faint); }
-.slotbtn.tier-low .m { color: var(--purple-lt); }
-.slotbtn.tier-mid .m { color: var(--magenta-2); }
-.slotbtn.tier-hot .m { color: var(--gold); }
-.slotbtn.sel {
-  border-color: var(--magenta); background: rgba(229,56,138,.22);
-  box-shadow: 0 0 0 2px rgba(229,56,138,.45), 0 6px 16px rgba(229,56,138,.28);
-  transform: translateY(-2px);
+.slotbtn span { font-size: 11px; color: var(--muted); }
+.slotbtn b, .slot-result b { font-variant-numeric: tabular-nums; }
+.slotbtn.tier-hot, .slot-result.tier-hot { background: #fff0e3; border-color: #efd1b2; color: #834517; }
+.slotbtn.tier-mid, .slot-result.tier-mid { background: #faedf4; border-color: #eccddd; color: #8c2e61; }
+.slotbtn:hover { border-color: var(--purple); }
+.slotbtn[aria-pressed="true"] {
+  background: var(--purple); color: white; border-color: var(--purple);
 }
-
-/* ---- Селектор номинала ---- */
-.stake-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.stake-row input[type=range] { flex: 1; accent-color: var(--magenta); cursor: pointer; }
-.stake-val {
-  font-size: 13px; font-weight: 700; white-space: nowrap;
-  font-variant-numeric: tabular-nums; min-width: 128px; text-align: right;
+.slotbtn[aria-pressed="true"] span { color: white; }
+.slotbtn.landed { outline: 2px solid #178164; outline-offset: -2px; }
+.stake-row { display: flex; align-items: center; gap: 9px; padding: 9px 11px; background: #f8f6fd; border-radius: 10px; }
+.stake-row label { color: var(--muted); font-size: 13px; font-weight: 650; }
+.stake-row input { flex: 1; min-width: 55px; margin: 0; accent-color: var(--purple); }
+.stake-row output { min-width: 65px; font-weight: 750; font-size: 14px; text-align: right; }
+.pl-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+.pl-ticket-bets { padding: 5px 0 0; list-style: none; }
+.pl-ticket-bets li { display: flex; gap: 6px; justify-content: space-between; padding-top: 3px; }
+.result-banner {
+  margin-top: 13px; padding: 10px 12px; border-radius: 11px; background: var(--soft);
+  color: var(--ink); font-size: 14px;
 }
-
-.sel-summary {
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 13px; color: var(--muted); margin-bottom: 12px; gap: 10px;
+.result-banner > p { color: var(--muted); }
+.result-banner > strong { display: block; margin-block: 3px; font-size: 19px; }
+.result-banner.win { background: #e7f6ee; }
+.result-banner.win b { color: var(--green); }
+.feedback-panel { background: #fff7fb; border-color: #f2dce8; }
+.pl-static-example { display: flex; margin-top: 9px; gap: 5px; flex-wrap: wrap; }
+.pl-static-example > * {
+  padding: 4px 8px; border-radius: 7px; background: var(--soft); color: var(--purple); font-size: 13px;
 }
-.sel-summary .win { color: var(--gold); font-weight: 700; }
-
-/* ---- Гистограмма частот: 15 колонок ---- */
-#plBars .bar { min-width: 0; }
+.pl-static-example > b { background: var(--purple); color: white; }
+.slot-result { display: inline-flex; width: fit-content; gap: 7px; min-height: 30px; padding: 4px 8px; }
+@media (max-width: 1030px) {
+  .slots-grid { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .slots-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+  .pl-actions { width: 100%; }
+  .pl-actions .btn-primary { flex: 1; }
+}

@@ -1,530 +1,239 @@
-/* ============================================================
-   common.css — единая тема Лаборатории мини-игр.
-   Цвета из Плинко, система токенов из Покера.
-   Всё, что видно на всех трёх страницах, живёт здесь.
-   ============================================================ */
-
 :root {
-  /* ---- Фон и поверхности ---- */
-  --bg:        #0B0726;
-  --bg-2:      #120B3A;
-  --panel:     #191247;
-  --panel-2:   #1F1657;
-  --line:      rgba(255,255,255,.10);
-  --line-2:    rgba(255,255,255,.06);
-
-  /* ---- Бренд НЛ ---- */
-  --magenta:   #E5388A;
-  --magenta-2: #FF5BA6;
-  --purple:    #7F77DD;
-  --purple-lt: #CECBF6;
-
-  /* ---- Текст ---- */
-  --ink:       #EDEBFF;
-  --muted:     #A39FD6;
-  --faint:     #7C77AE;
-
-  /* ---- Смысловые. Не использовать декоративно ---- */
-  --gold:      #FFC83D;   /* выигрыш, куш */
-  --green:     #3CE0A0;   /* положительный результат */
-  --red:       #FF6B6B;   /* отрицательный результат, красная масть */
-
-  /* ---- Шрифты ----
-     Системный стек: ничего не грузится извне, вёрстка не поедет
-     при недоступности CDN. Чтобы поставить фирменный шрифт —
-     положить файлы в assets/fonts/, добавить @font-face
-     и подменить --font-display. Больше менять нигде не нужно. */
-  --font-text:    system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  --font-display: var(--font-text);
-
-  /* ---- Скругления ---- */
-  --r-sm: 8px;
-  --r:    14px;
-  --r-lg: 20px;
-  --r-xl: 28px;
-
-  /* ---- Тени ---- */
-  --sh-sm:   0 2px 8px rgba(0,0,0,.25);
-  --sh:      0 8px 32px rgba(0,0,0,.30);
-  --sh-card: 0 12px 36px rgba(0,0,0,.40);
-
-  /* ---- Раскладка ---- */
-  --wrap:    1120px;
-  --gap:     18px;
-  --header-h: 62px;
+  color-scheme: light;
+  --bg: #f6f5fa;
+  --panel: #fff;
+  --soft: #efedf8;
+  --line: #e4e0ef;
+  --ink: #211b38;
+  --muted: #5c5571;
+  --faint: #6b6480;
+  --purple: #5140b2;
+  --purple-hover: #423198;
+  --magenta: #b12d69;
+  --magenta-soft: #fbeaf3;
+  --gold: #805018;
+  --green: #135d46;
+  --red: #b12848;
+  --radius: 20px;
+  --small: 11px;
+  --shadow: 0 10px 30px rgba(50, 34, 91, .055);
+  --width: 1140px;
+  --gap: 20px;
+  --font-text: 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body, h1, h2, h3, p, ul { margin: 0; }
 body {
-  font-family: var(--font-text);
-  background:
-    radial-gradient(900px 500px at 80% -50px, rgba(229,56,138,.18), transparent 60%),
-    radial-gradient(700px 500px at 0% 0%,    rgba(127,119,221,.20), transparent 55%),
-    linear-gradient(180deg, var(--bg), var(--bg-2));
-  background-attachment: fixed;
-  color: var(--ink);
   min-height: 100vh;
-  overflow-x: hidden;              /* страховка: ни одна страница не едет вбок */
-  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.5 var(--font-text);
   -webkit-text-size-adjust: 100%;
 }
-
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.16; letter-spacing: -.025em; }
+h1 { font-size: clamp(32px, 5vw, 53px); font-weight: 750; }
+h2 { font-size: clamp(21px, 3vw, 27px); }
+h3 { font-size: 18px; }
 a { color: inherit; text-decoration: none; }
+button { color: inherit; font: inherit; cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+:focus-visible { outline: 3px solid #755fd0; outline-offset: 3px; }
+.tnum, .timer, .nl-table .r, .wallet-values { font-variant-numeric: tabular-nums; }
+.positive { color: var(--green); }
+.muted { color: var(--muted); }
+.wrap { width: min(100%, var(--width)); margin-inline: auto; padding: 0 24px; flex: 1; }
 
-.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 18px; }
-
-/* Цифры выравниваем по ширине — таймер и суммы не должны прыгать */
-.tnum, .timer b, .balance-val { font-variant-numeric: tabular-nums; }
-
-/* ============================================================
-   ШАПКА
-   ============================================================ */
 .nl-header {
-  display: flex; align-items: center; gap: 14px;
-  max-width: var(--wrap); margin: 0 auto;
-  padding: 12px 18px; min-height: var(--header-h);
+  display: flex; align-items: center; gap: 9px;
+  width: min(100%, var(--width)); min-height: 76px;
+  margin-inline: auto; padding: 12px 24px;
 }
-
-.nl-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .4px; flex-shrink: 0; }
+.nl-logo { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
 .nl-logo .mark {
-  width: 30px; height: 30px; border-radius: var(--r-sm);
-  background: linear-gradient(135deg, var(--magenta), var(--purple));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; color: #fff;
+  display: grid; place-items: center; width: 38px; height: 38px;
+  background: var(--purple); color: white; border-radius: 12px;
+  font-weight: 800; font-size: 13px;
 }
-.nl-logo .name { font-size: 13px; }
-@media (max-width: 560px) { .nl-logo .name { display: none; } }
-
+.nl-logo .name { font-size: 11px; font-weight: 750; letter-spacing: .05em; max-width: 112px; line-height: 1.25; }
 .nl-header-spacer { flex: 1; }
-
-.nl-balance {
-  display: flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,.07); border: 1px solid var(--line);
-  border-radius: var(--r-sm); padding: 7px 12px; font-size: 14px;
-  white-space: nowrap;
+.nl-back, .nl-site, .nl-balance {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 7px 10px; min-height: 36px; white-space: nowrap; border-radius: var(--small);
+  font-size: 13px; font-weight: 650;
 }
-.nl-balance b { color: var(--gold); }
-@media (max-width: 480px) { .nl-balance .label { display: none; } }
-
-/* Кнопка выхода в хаб — видна только в играх (рисует nl-shell.js) */
-.nl-back {
-  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
-  font-size: 13px; color: var(--muted);
-  background: rgba(255,255,255,.05); border: 1px solid var(--line);
-  border-radius: var(--r-sm); padding: 7px 12px;
-  transition: color .15s, border-color .15s, background .15s;
-}
-.nl-back:hover { color: var(--ink); border-color: var(--purple); background: rgba(255,255,255,.09); }
-.nl-back-ico { font-size: 15px; line-height: 1; }
-/* На узких экранах оставляем только стрелку, чтобы шапка не переполнялась */
-@media (max-width: 420px) { .nl-back-txt { display: none; } .nl-back { padding: 7px 10px; } }
-
-/* Выход на основной сайт НЛ — на всех страницах (рисует nl-shell.js) */
-.nl-site {
-  display: inline-flex; align-items: center; flex-shrink: 0; white-space: nowrap;
-  font-size: 13px; font-weight: 600; color: var(--ink);
-  background: rgba(229,56,138,.12); border: 1px solid rgba(229,56,138,.45);
-  border-radius: var(--r-sm); padding: 7px 12px;
-  transition: border-color .15s, background .15s;
-}
-.nl-site:hover { border-color: var(--magenta); background: rgba(229,56,138,.22); }
+.nl-back, .nl-site { color: var(--muted); }
+.nl-back:hover, .nl-site:hover { background: var(--soft); color: var(--ink); }
+.nl-balance { background: #ece7fc; border: 1px solid #d8cff2; color: #403084; }
+.nl-balance:hover { background: #e1d8fa; }
+.nl-balance b { font-weight: 800; }
 .nl-site-short { display: none; }
-/* На узких экранах — короткая подпись, чтобы шапка не переполнялась */
-@media (max-width: 760px) { .nl-site-long { display: none; } .nl-site-short { display: inline; } }
-@media (max-width: 420px) { .nl-header { gap: 8px; padding: 10px 12px; } .nl-site { font-size: 12px; padding: 6px 9px; } }
 
-/* ============================================================
-   КНОПКИ
-   ============================================================ */
 .btn {
-  font-family: inherit; font-size: 14px; font-weight: 600;
-  border-radius: var(--r-sm); padding: 10px 16px;
-  border: 1px solid transparent; cursor: pointer;
-  transition: transform .12s, background .15s, border-color .15s, opacity .15s;
-  color: var(--ink); background: transparent;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  min-height: 42px; padding: 9px 15px; border: 1px solid transparent;
+  border-radius: var(--small); font-size: 14px; font-weight: 700; line-height: 1.2;
+  background: transparent; color: var(--ink); text-align: center;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
 }
-.btn:active:not(:disabled) { transform: translateY(1px); }
-.btn:disabled { opacity: .45; cursor: not-allowed; }
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--magenta), var(--magenta-2));
-  color: #fff; box-shadow: var(--sh-sm);
-}
-.btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
-
-.btn-ghost { border-color: var(--line); background: rgba(255,255,255,.05); }
-.btn-ghost:hover:not(:disabled) { border-color: var(--purple); background: rgba(255,255,255,.09); }
-
-.btn-mini { font-size: 12px; padding: 6px 11px; }
+.btn:disabled { opacity: .53; }
+.btn-primary { color: white; background: var(--purple); }
+.btn-primary:hover:not(:disabled) { background: var(--purple-hover); }
+.btn-ghost { background: #fff; border-color: var(--line); }
+.btn-ghost:hover:not(:disabled) { background: var(--soft); border-color: #c9bfea; }
+.btn-feedback { color: white; background: var(--magenta); }
+.btn-feedback:hover { background: #972558; }
+.btn-mini { min-height: 34px; font-size: 13px; padding: 6px 10px; }
 .btn-wide { width: 100%; }
 
-/* ============================================================
-   КАРТОЧКИ И ПАНЕЛИ
-   ============================================================ */
-.card {
-  background: linear-gradient(160deg, var(--panel), var(--panel-2));
-  border: 1px solid var(--line);
-  border-radius: var(--r); box-shadow: var(--sh);
-}
-.card-pad { padding: 18px; }
-
-.block-title {
-  font-size: 15px; font-weight: 700; margin-bottom: 12px;
-  font-family: var(--font-display);
-}
-
-/* ============================================================
-   НАВИГАЦИЯ ПО РАЗДЕЛАМ
-   Единая для обеих игр: Игра · Как играть · Выигрыши · Архив тиражей
-   Вкладками, а не якорями: на телефоне якоря работают плохо.
-   ============================================================ */
-.nl-tabs {
-  display: flex; gap: 4px; max-width: var(--wrap); margin: 0 auto 18px;
-  padding: 0 18px; overflow-x: auto; -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-.nl-tabs::-webkit-scrollbar { display: none; }
-
+.game-heading { padding-block: 22px 16px; }
+.nl-tabs { display: flex; width: fit-content; max-width: 100%; gap: 4px; margin-top: 13px; }
 .nl-tab {
-  font-family: inherit; font-size: 14px; color: var(--muted);
-  background: transparent; border: 0; border-bottom: 2px solid transparent;
-  padding: 10px 14px; cursor: pointer; white-space: nowrap;
-  transition: color .15s, border-color .15s;
+  padding: 8px 13px; border: 1px solid transparent; border-radius: var(--small);
+  background: transparent; color: var(--muted); font-size: 14px; font-weight: 650;
+  white-space: nowrap;
 }
-.nl-tab:hover { color: var(--ink); }
-.nl-tab.active { color: var(--ink); border-bottom-color: var(--magenta); font-weight: 600; }
-
-.nl-view { display: none; }
-.nl-view.active { display: block; }
-
-/* ============================================================
-   ПОЛОСА ТИРАЖА — одинаковая в обеих играх
-   ============================================================ */
+.nl-tab:hover { background: var(--soft); }
+.nl-tab.active { color: var(--purple); background: #fff; border-color: var(--line); }
+.nl-view:not(.active) { display: none; }
 .nl-drawbar {
-  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-  background: var(--panel-2); border: 1px solid var(--line);
-  border-radius: var(--r); padding: 12px 16px; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 11px 16px; flex-wrap: wrap;
+  padding: 10px 15px; margin-bottom: 15px; background: var(--soft);
+  border: 1px solid var(--line); border-radius: 14px; font-size: 13px; color: var(--muted);
 }
-.nl-drawbar .pill {
-  font-size: 13px; color: var(--muted);
-  background: rgba(255,255,255,.05); border: 1px solid var(--line);
-  border-radius: 999px; padding: 5px 12px;
-}
-.nl-drawbar .pill b { color: var(--ink); }
-
-.nl-drawbar .timer {
-  font-size: 13px; color: var(--muted);
-  display: flex; align-items: center; gap: 7px;
-}
-.nl-drawbar .timer b { color: var(--ink); font-size: 15px; }
-.nl-drawbar .timer.soon b { color: var(--gold); }
-.nl-drawbar .timer.closed b { color: var(--magenta-2); }
-
+.nl-drawbar .pill { color: var(--purple); font-weight: 650; }
+.nl-drawbar .timer b, .draw-prize b { color: var(--ink); font-size: 14px; margin-left: 4px; }
+.nl-drawbar .timer.soon b { color: var(--magenta); }
 .nl-drawbar .spacer { flex: 1; }
 
-/* ============================================================
-   БИЛЕТ — общий вид списка ставок
-   ============================================================ */
-.slip-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.slip-head .cnt { font-size: 12px; color: var(--muted); }
+.card { min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+.card-pad { padding: clamp(15px, 2.5vw, 25px); }
+.play-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(275px, 320px); align-items: start; gap: var(--gap); }
+.play-main { min-width: 0; display: grid; gap: var(--gap); }
+.section-heading p, .rules-note p, .rule-grid p, .table-note, .feedback-panel p { color: var(--muted); margin-top: 8px; }
+.section-heading p { max-width: 66ch; }
+.rules-heading { margin: 5px 0 16px; }
+.rule-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); }
+.rule-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.rules-note { margin: var(--gap) 0; }
+.prize-grid { display: grid; grid-template-columns: minmax(230px, .75fr) minmax(0, 1.4fr); gap: var(--gap); align-items: start; }
+.table-scroll { overflow-x: auto; margin-top: 12px; }
+.nl-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.nl-table td, .nl-table th { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); }
+.nl-table tbody tr:last-child > * { border-bottom: 0; }
+.nl-table thead { color: var(--muted); background: #f5f3fb; }
+.nl-table tbody th { font-weight: 650; }
+.nl-table .r { text-align: right; white-space: nowrap; }
 
-.bet-row {
-  display: flex; align-items: center; gap: 10px;
-  background: rgba(255,255,255,.04); border: 1px solid var(--line-2);
-  border-radius: var(--r-sm); padding: 10px 12px; margin-bottom: 8px;
+.tickets-heading, .ticket-line, .purchase-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.tickets-heading { margin-bottom: 15px; }
+.tickets-heading h2, .feedback-panel h2 { font-size: 21px; }
+.count-badge {
+  min-width: 29px; padding: 3px 8px; text-align: center;
+  border-radius: 30px; background: var(--soft); color: var(--purple); font-weight: 750; font-size: 13px;
 }
-.bet-row.win  { border-color: rgba(60,224,160,.5);  background: rgba(60,224,160,.08); }
-.bet-row.lose { opacity: .55; }
-.bet-row .info { flex: 1; min-width: 0; }
-.bet-row .name { font-size: 13px; font-weight: 600; }
-.bet-row .meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.bet-row .amount { font-size: 13px; color: var(--muted); white-space: nowrap; }
-.bet-row .amount.w { color: var(--green); font-weight: 700; }
-.bet-row .rm {
-  width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0;
-  border: 1px solid var(--line); background: transparent;
-  color: var(--muted); cursor: pointer; font-size: 15px; line-height: 1;
+.ticket-list { display: grid; gap: 8px; }
+.empty-state {
+  color: var(--muted); font-size: 14px; padding: 15px 13px;
+  border: 1px dashed #d8d1e8; border-radius: var(--small); background: #fbfafc;
 }
-.bet-row .rm:hover { color: var(--magenta-2); border-color: var(--magenta); }
+.ticket-row { font-size: 13px; min-width: 0; padding: 10px 11px; border-radius: var(--small); border: 1px solid var(--line); }
+.ticket-row p { color: var(--muted); margin-top: 4px; }
+.ticket-main { background: #f6f4fc; }
+.ticket-extra { background: #fcf1f6; border-color: #f0dce8; }
+.ticket-line > :last-child { text-align: right; }
+.ticket-line > b { white-space: nowrap; }
+.tickets-panel .btn, .feedback-panel .btn { margin-top: 11px; }
+.tickets-note { margin-top: 10px; color: var(--muted); font-size: 13px; }
+.purchase-bar { margin-top: 16px; padding-top: 13px; border-top: 1px solid var(--line); }
+.purchase-info { display: grid; color: var(--muted); font-size: 13px; }
+.purchase-bar .btn { white-space: nowrap; }
 
-.slip-empty { color: var(--faint); font-size: 13px; padding: 14px 0; text-align: center; }
-
-.totals {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 9px 0; border-top: 1px solid var(--line-2); font-size: 13px; color: var(--muted);
+.archive-list { display: grid; gap: 9px; }
+.archive-row {
+  display: grid; grid-template-columns: minmax(145px, 1fr) minmax(130px, 1.2fr) minmax(175px, 1fr);
+  align-items: center; gap: 12px; padding: 13px 17px;
 }
-.totals .v { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
-.totals .v.gold { color: var(--gold); }
-
-/* ============================================================
-   АВТОПОВТОР
-   ============================================================ */
-.autorepeat {
-  display: flex; align-items: center; gap: 10px;
-  border: 1px solid var(--line); border-radius: var(--r-sm);
-  padding: 10px 12px; margin-top: 10px; font-size: 13px;
-}
-.autorepeat input { width: 16px; height: 16px; accent-color: var(--magenta); cursor: pointer; }
-.autorepeat label { cursor: pointer; flex: 1; }
-.autorepeat .left { color: var(--muted); font-size: 12px; white-space: nowrap; }
-
-/* ============================================================
-   РЕЗУЛЬТАТ РОЗЫГРЫША — одинаковая подача в обеих играх
-   ============================================================ */
-.result-banner {
-  border: 1px solid var(--line); border-radius: var(--r);
-  padding: 14px 16px; font-size: 14px; color: var(--muted);
-  background: rgba(255,255,255,.04);
-  transition: border-color .2s, background .2s;
-}
-.result-banner .big { font-size: 19px; font-weight: 700; color: var(--ink); font-family: var(--font-display); }
-.result-banner .sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
-.result-banner.win  { border-color: rgba(60,224,160,.55); background: rgba(60,224,160,.10); }
-.result-banner.win .big { color: var(--green); }
-.result-banner.lose { border-color: rgba(255,107,107,.35); background: rgba(255,107,107,.07); }
-
-/* ============================================================
-   ТАБЛИЦЫ (раздел «Выигрыши», архив)
-   ============================================================ */
-.nl-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.nl-table th {
-  text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .06em;
-  color: var(--muted); font-weight: 600; padding: 10px 12px;
-  border-bottom: 1px solid var(--line);
-}
-.nl-table td { padding: 9px 12px; border-bottom: 1px solid var(--line-2); }
-.nl-table tr:last-child td { border-bottom: 0; }
-.nl-table .r { text-align: right; font-variant-numeric: tabular-nums; }
-.nl-table .mlt { color: var(--gold); font-weight: 700; }
-.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-
-/* ============================================================
-   АРХИВ ТИРАЖЕЙ — лента исходов + гистограмма частот
-   ============================================================ */
-.hist-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
-.chip {
-  min-width: 30px; height: 30px; padding: 0 8px; border-radius: var(--r-sm);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700; border: 1px solid var(--line);
-  background: rgba(255,255,255,.05);
-}
-.chip.c-hot { color: var(--gold);      border-color: rgba(255,200,61,.45); }
-.chip.c-mid { color: var(--magenta-2); border-color: rgba(255,91,166,.40); }
-.chip.c-low { color: var(--purple-lt); }
-
-.bars { display: flex; align-items: flex-end; gap: 4px; height: 96px; }
-.bars .bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 5px; }
-.bars .fill {
-  width: 100%; border-radius: 4px 4px 0 0;
-  background: linear-gradient(180deg, var(--magenta-2), var(--purple));
-  transition: height .4s ease;
-}
-.bars .bn { font-size: 10px; color: var(--faint); }
-
-/* ============================================================
-   ШАГИ «КАК ИГРАТЬ»
-   ============================================================ */
-.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); }
-@media (max-width: 800px) { .steps { grid-template-columns: 1fr; } }
-.step .num {
-  width: 30px; height: 30px; border-radius: var(--r-sm);
-  background: linear-gradient(135deg, var(--magenta), var(--purple));
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; margin-bottom: 10px; font-size: 14px;
-}
-.step h3 { font-size: 15px; margin-bottom: 6px; font-family: var(--font-display); }
-.step p  { font-size: 13px; color: var(--muted); line-height: 1.55; }
-
-/* ============================================================
-   ФУТЕР
-   ============================================================ */
-.nl-footer {
-  border-top: 1px solid var(--line); margin-top: 44px; padding: 22px 0 32px;
-  font-size: 12px; color: var(--faint);
-}
+.archive-row h3 { font-size: 16px; margin-bottom: 4px; }
+.archive-row time, .archive-result span { color: var(--muted); font-size: 13px; }
+.archive-result { display: grid; gap: 3px; font-size: 14px; }
+.nl-footer { margin-top: 34px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
 .nl-footer .row {
-  max-width: var(--wrap); margin: 0 auto; padding: 0 18px;
-  display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap;
+  width: min(100%, var(--width)); display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: space-between; gap: 8px; margin-inline: auto; padding: 15px 24px;
 }
-.age {
-  border: 1px solid var(--line); border-radius: 999px;
-  padding: 2px 9px; font-weight: 700; color: var(--muted);
-}
+.age { border: 1px solid #c9c2db; border-radius: 7px; padding: 1px 5px; font-weight: 700; }
 
-/* Пометка демонстрационного режима */
-.demo-note {
-  position: fixed; left: 12px; bottom: 12px; z-index: 40;
-  font-size: 11px; color: var(--faint);
-  background: rgba(11,7,38,.9); border: 1px solid var(--line);
-  border-radius: 999px; padding: 5px 11px;
+.wallet-dialog {
+  inset: 0; width: min(560px, calc(100% - 28px)); max-height: min(740px, 88dvh);
+  padding: 0; border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: 0 16px 80px rgba(33, 27, 56, .22); color: var(--ink); background: var(--panel);
 }
+.wallet-dialog::backdrop { background: rgba(36, 25, 62, .46); }
+.wallet-head {
+  position: sticky; top: 0; z-index: 1; display: flex; justify-content: space-between;
+  padding: 20px; background: #f6f3ff; border-bottom: 1px solid var(--line);
+}
+.wallet-current { color: var(--purple); font-size: 24px; font-weight: 800; margin-top: 4px; }
+.wallet-close { border: 1px solid var(--line); border-radius: 10px; padding: 1px 10px 3px; font-size: 20px; background: white; }
+.wallet-rows { list-style: none; padding: 2px 20px; }
+.wallet-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 13px 0; }
+.wallet-row + .wallet-row { border-top: 1px solid var(--line); }
+.wallet-row div { display: grid; min-width: 0; }
+.wallet-row span, .wallet-row time { color: var(--muted); font-size: 13px; }
+.wallet-values { text-align: right; white-space: nowrap; }
+.wallet-selection { overflow-wrap: anywhere; }
+.wallet-row .wallet-status { font-weight: 650; color: var(--purple); }
 
-/* ============================================================
-   ПАНЕЛЬ ОТЛАДКИ АНАЛИТИКИ (?debug=1)
-   ============================================================ */
 .nl-debug {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 100;
-  max-height: 172px; overflow-y: auto;
-  background: rgba(6,4,20,.95); border-top: 1px solid var(--magenta);
-  font-family: ui-monospace, 'SF Mono', Consolas, monospace; font-size: 11px;
-  padding: 8px 12px; color: var(--purple-lt);
+  position: fixed; right: 10px; bottom: 10px; z-index: 30; width: min(340px, 90vw);
+  max-height: 36vh; overflow: auto; padding: 12px; background: white; border: 1px solid var(--line);
+  border-radius: var(--small); font: 12px/1.5 monospace; box-shadow: var(--shadow);
 }
-.nl-debug .hd {
-  position: sticky; top: 0; background: rgba(6,4,20,.98);
-  display: flex; justify-content: space-between; align-items: center;
-  color: var(--magenta-2); font-weight: 700; padding-bottom: 6px;
-}
-.nl-debug .ev { padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,.05); }
-.nl-debug .ev .n { color: var(--gold); }
-.nl-debug .ev .p { color: var(--faint); }
+.nl-debug .hd { font-weight: 750; }
+.nl-debug .ev { border-bottom: 1px solid var(--line); }
+.nl-debug .n { color: var(--purple); }
+.demo-note { text-align: center; color: var(--muted); padding: 8px; }
 
-/* ===== ФОРМА ОБРАТНОЙ СВЯЗИ ===== */
-/* Всё скоупим под .nlfb-*, глобальные токены не трогаем. */
-
-.nlfb-overlay {
-  position: fixed; inset: 0; z-index: 120;
-  display: flex; align-items: center; justify-content: center;
-  padding: 20px; overflow-y: auto;
-  background: rgba(6,4,20,.72);
-  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+@media (max-width: 850px) {
+  .play-layout { grid-template-columns: minmax(0, 1fr) minmax(220px, 255px); }
+  .prize-grid { grid-template-columns: 1fr; }
 }
-
-.nlfb-modal {
-  width: 100%; max-width: 520px;
-  display: flex; flex-direction: column;
-  max-height: calc(100vh - 40px);
-  background: var(--panel); border: 1px solid var(--line);
-  border-radius: var(--r-lg); box-shadow: var(--sh-card);
-  overflow: hidden;
+@media (max-width: 740px) {
+  :root { --gap: 14px; }
+  .wrap, .nl-header, .nl-footer .row { padding-inline: 15px; }
+  .nl-header { min-height: 62px; gap: 5px; }
+  .nl-site-long, .nl-logo .name { display: none; }
+  .nl-site-short { display: inline; }
+  .nl-back, .nl-site { padding-inline: 6px; }
+  .nl-balance { padding-inline: 8px; }
+  .play-layout { grid-template-columns: 1fr; }
+  .rule-grid.three { grid-template-columns: 1fr; }
 }
-
-/* Шапка окна: степпер «шаг N из 4» и крестик */
-.nlfb-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 18px 12px;
+@media (max-width: 540px) {
+  .game-heading { padding-top: 12px; }
+  .rule-grid { grid-template-columns: 1fr; }
+  .archive-row { grid-template-columns: 1fr auto; gap: 8px; padding: 11px 12px; }
+  .archive-result { grid-column: 1 / -1; }
+  .nl-drawbar .spacer { display: none; }
+  .nl-drawbar { gap: 6px 12px; }
+  .draw-prize { width: 100%; }
 }
-.nlfb-step-label {
-  font-size: 12px; text-transform: uppercase; letter-spacing: .06em;
-  color: var(--muted); font-weight: 600;
+@media (max-width: 420px) {
+  .nl-header { flex-wrap: wrap; row-gap: 2px; }
+  .nl-site { margin-left: auto; }
+  .nl-back-txt { display: none; }
+  .nl-back { min-width: 26px; }
+  .nl-balance .label { font-size: 11px; }
+  .nl-site-short, #nlTopup { font-size: 11px; }
+  .nl-tab { padding-inline: 9px; }
+  .purchase-bar { align-items: start; flex-direction: column; gap: 8px; }
+  .purchase-bar > .btn { width: 100%; }
 }
-.nlfb-close {
-  width: 30px; height: 30px; flex-shrink: 0;
-  border: 1px solid var(--line); border-radius: var(--r-sm);
-  background: rgba(255,255,255,.05); color: var(--muted);
-  font-size: 20px; line-height: 1; cursor: pointer;
-  transition: color .15s, border-color .15s, background .15s;
-}
-.nlfb-close:hover { color: var(--ink); border-color: var(--magenta); background: rgba(255,255,255,.09); }
-
-/* Индикатор прогресса */
-.nlfb-progress {
-  height: 3px; margin: 0 18px; border-radius: 999px;
-  background: rgba(255,255,255,.08); overflow: hidden;
-}
-.nlfb-progress-fill {
-  height: 100%; width: 25%; border-radius: 999px;
-  background: linear-gradient(90deg, var(--magenta), var(--magenta-2));
-  transition: width .25s ease;
-}
-
-/* Прокручиваемое тело шага */
-.nlfb-body { padding: 18px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-
-.nlfb-title {
-  font-family: var(--font-display); font-size: 18px; font-weight: 700;
-  margin-bottom: 6px;
-}
-.nlfb-sub { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 16px; }
-
-/* Шаг 1: строка игры + звёзды */
-.nlfb-game-row {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 12px 0; border-bottom: 1px solid var(--line-2);
-}
-.nlfb-game-row:last-child { border-bottom: 0; }
-.nlfb-game-name { font-size: 14px; font-weight: 600; }
-
-.nlfb-stars { display: flex; gap: 4px; flex-shrink: 0; }
-.nlfb-star {
-  border: 0; background: transparent; cursor: pointer;
-  font-size: 24px; line-height: 1; padding: 2px;
-  color: rgba(255,255,255,.18);
-  transition: color .12s, transform .12s;
-}
-.nlfb-star:hover { transform: scale(1.12); }
-.nlfb-star.on { color: var(--gold); }
-
-/* Шаг 2: блок причины по игре + чипы */
-.nlfb-reason-block {
-  padding: 14px 0; border-bottom: 1px solid var(--line-2);
-}
-.nlfb-reason-block:last-child { border-bottom: 0; }
-.nlfb-reason-name { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
-
-.nlfb-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.nlfb-chip {
-  font-family: inherit; font-size: 13px;
-  border: 1px solid var(--line); border-radius: 999px;
-  background: rgba(255,255,255,.05); color: var(--muted);
-  padding: 7px 13px; cursor: pointer;
-  transition: color .15s, border-color .15s, background .15s;
-}
-.nlfb-chip:hover { color: var(--ink); border-color: var(--purple); }
-.nlfb-chip.on {
-  color: var(--bg); font-weight: 600; border-color: transparent;
-  background: var(--gold);
-}
-
-/* Общий вид текстовых полей формы */
-.nlfb-custom, .nlfb-comment {
-  width: 100%; margin-top: 10px;
-  font-family: inherit; font-size: 14px; color: var(--ink);
-  background: var(--panel-2); border: 1px solid var(--line);
-  border-radius: var(--r-sm); padding: 10px 12px; resize: vertical;
-  transition: border-color .15s;
-}
-.nlfb-custom::placeholder, .nlfb-comment::placeholder { color: var(--faint); }
-.nlfb-custom:focus, .nlfb-comment:focus { outline: none; border-color: var(--magenta); }
-
-/* Шаг 3: шкала «за деньги» 1..5 */
-.nlfb-scale { display: flex; gap: 8px; }
-.nlfb-scale-btn {
-  flex: 1; font-family: inherit; font-size: 16px; font-weight: 700;
-  border: 1px solid var(--line); border-radius: var(--r-sm);
-  background: rgba(255,255,255,.05); color: var(--muted);
-  padding: 12px 0; cursor: pointer;
-  transition: color .15s, border-color .15s, background .15s, transform .12s;
-}
-.nlfb-scale-btn:hover { color: var(--ink); border-color: var(--purple); }
-.nlfb-scale-btn:active { transform: translateY(1px); }
-.nlfb-scale-btn.on {
-  color: var(--bg); border-color: transparent; background: var(--gold);
-}
-
-/* Подвал окна: Назад / Далее (Отправить) */
-.nlfb-foot {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 14px 18px; border-top: 1px solid var(--line);
-}
-.nlfb-foot-spacer { flex: 1; }
-.nlfb-foot .nlfb-next { min-width: 120px; }
-
-/* Экран «Спасибо!» */
-.nlfb-thanks { padding: 40px 24px; text-align: center; }
-.nlfb-thanks-ico {
-  width: 56px; height: 56px; margin: 0 auto 16px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%; font-size: 28px; color: var(--bg);
-  background: linear-gradient(135deg, var(--magenta), var(--magenta-2));
-}
-.nlfb-thanks-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-.nlfb-thanks-sub { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 20px; }
-
-/* Адаптив: на телефоне окно на всю ширину с небольшими отступами */
-@media (max-width: 560px) {
-  .nlfb-overlay { padding: 12px; align-items: flex-start; }
-  .nlfb-modal { max-height: calc(100vh - 24px); }
-  .nlfb-game-row { flex-wrap: wrap; }
-  .nlfb-star { font-size: 26px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
 }
