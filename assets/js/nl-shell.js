@@ -159,22 +159,27 @@ window.NLShell = (function () {
   });
   const colorName = color => color === 'red' ? 'красный' : 'чёрный';
 
-  function ticketLabel(ticket) {
-    if (ticket.meta.game === 'plinko') return 'Плинко';
-    return 'Покер 52 · ' + (ticket.bets[0].market === 'match' ? 'Основная игра' : 'Дополнительная игра');
-  }
-
   function ticketSelection(ticket) {
     if (ticket.meta.game === 'plinko') {
-      return ticket.bets.map((b, i) => {
-        const payout = ticket.detail?.perBet[i].payout;
-        return 'Слот ' + (b.slot + 1) + ' · ' + fmt(b.price) + ' ◆' +
-          (payout === undefined ? '' : (payout > 0 ? ' → +' + fmt(payout) + ' ◆' : ' · без выигрыша'));
-      }).join('; ');
+      const slot = ticket.detail?.slot;
+      return (Number.isInteger(slot) ? '<p class="wallet-selection-note">Выпал слот ' + (slot + 1) + '</p>' : '') +
+        '<ul class="wallet-bets" aria-label="Ставки по слотам">' + ticket.bets.map((b, i) => {
+          const payout = ticket.detail?.perBet?.[i]?.payout;
+          const result = payout === undefined ? '' : '<span class="wallet-bet-result' +
+            (payout > 0 ? ' positive">Выигрыш +' + fmt(payout) + ' ◆' : '">Без выигрыша') + '</span>';
+          return '<li><strong>Слот ' + (b.slot + 1) + ' <span>×' + b.mult + '</span></strong><b>' +
+            fmt(b.price) + ' ◆</b>' + result + '</li>';
+        }).join('') + '</ul>';
     }
     const bet = ticket.bets[0];
-    const cards = bet.cards.map(c => c.rank + c.suit).join(' ');
-    return cards + (bet.color ? ' · цвет: ' + colorName(bet.color) : '');
+    const result = ticket.detail?.perBet?.[0];
+    const note = bet.color ? 'Прогноз — ' + colorName(bet.color) : 'Выбранные карты';
+    const outcome = bet.color && typeof result?.colorWon === 'boolean'
+      ? (result.colorWon ? 'Цвет угадан' : 'Цвет не угадан')
+      : (Number.isInteger(result?.matches) ? 'Совпало карт — ' + result.matches : '');
+    const cards = bet.cards.map(({ rank, suit }) => '<span>' + rank + suit + '</span>').join('');
+    return '<p class="wallet-selection-note">' + note + '</p><div class="wallet-cards" aria-label="Карты в билете">' +
+      cards + '</div>' + (outcome ? '<p class="wallet-selection-note">' + outcome + '</p>' : '');
   }
 
   function ticketStatus(t) {
@@ -186,23 +191,40 @@ window.NLShell = (function () {
     const dialog = document.getElementById('nlWallet');
     if (!dialog?.open) return;
     dialog.querySelector('#nlWalletBalance').textContent = fmt(wallet.balance) + ' ◆';
+    const rows = dialog.querySelector('#nlWalletRows');
+    const expanded = new Set([...rows.querySelectorAll('details[open]')].map(row => row.dataset.walletRecord));
+    const focused = rows.contains(document.activeElement)
+      ? document.activeElement.closest('details')?.dataset.walletRecord : undefined;
     const labels = { start: 'Стартовый баланс', opening: 'Остаток из предыдущей версии',
       daily: 'Ежедневное начисление', topup: 'Пополнение демобаланса',
       purchase: 'Покупка билета', win: 'Начисление выигрыша' };
     const tickets = new Map(wallet.tickets.map(t => [t.id, t]));
-    dialog.querySelector('#nlWalletRows').innerHTML = wallet.operations.slice().reverse().map(op => {
+    const field = (label, value) => '<div><dt>' + label + '</dt><dd>' + value + '</dd></div>';
+    rows.innerHTML = wallet.operations.map((op, i) => {
       const t = tickets.get(op.ticketId);
-      const amount = (op.amount < 0 ? '−' : '+') + fmt(Math.abs(op.amount)) + ' ◆';
-      const context = t ? '<strong>' + ticketLabel(t) + '</strong><span>Билет № ' + t.id +
-        ' · тираж № ' + fmt(t.targetDraw) + '</span>' : '';
-      const selection = t && op.type === 'purchase'
-        ? '<span class="wallet-selection">' + ticketSelection(t) + '</span><span class="wallet-status">' +
-          ticketStatus(t) + '</span>' : '';
-      return '<li class="wallet-row"><div><b>' + labels[op.type] + '</b>' + context +
-        selection + '<time datetime="' + new Date(op.date).toISOString() + '">' + dateTime.format(op.date) +
-        '</time></div><div class="wallet-values"><b class="' + (op.amount > 0 ? 'positive' : '') + '">' +
-        amount + '</b><span>Остаток ' + fmt(op.balance) + ' ◆</span></div></li>';
-    }).join('');
+      const amount = '<b class="wallet-amount' + (op.amount > 0 ? ' positive' : '') + '">' +
+        (op.amount < 0 ? '−' : '+') + fmt(Math.abs(op.amount)) + ' ◆</b>';
+      const time = '<time datetime="' + new Date(op.date).toISOString() + '">' + dateTime.format(op.date) + '</time>';
+      const balance = fmt(op.balance) + ' ◆';
+      const label = labels[op.type];
+      if (!t) {
+        return '<li class="wallet-row"><div class="wallet-summary wallet-summary-plain"><span class="wallet-row-title">' +
+          '<strong>' + label + '</strong>' + time + '</span><span class="wallet-row-values">' + amount +
+          '<span class="wallet-meta">Остаток ' + balance + '</span></span></div></li>';
+      }
+      const isPoker = t.meta.game === 'poker';
+      const game = isPoker ? 'Покер 52' : 'Плинко';
+      const mode = isPoker ? field('Режим', t.bets[0].market === 'match' ? 'Основная игра' : 'Дополнительная игра') : '';
+      return '<li class="wallet-row"><details data-wallet-record="' + i + '"' +
+        (expanded.has(String(i)) ? ' open' : '') + '><summary class="wallet-summary">' +
+        '<span class="wallet-row-title"><strong>' + game + '</strong><span class="wallet-meta">Билет № ' +
+        fmt(t.id) + '</span></span>' + amount + '<span class="wallet-chevron" aria-hidden="true"></span></summary>' +
+        '<div class="wallet-details"><dl class="wallet-detail-grid">' + field('Тираж', '№ ' + fmt(t.targetDraw)) +
+        field('Ставка', fmt(t.total) + ' ◆') + mode + field('Результат', ticketStatus(t)) +
+        field('Операция', label) + field('Дата и время', time) + field('Остаток', balance) + '</dl>' +
+        '<div class="wallet-selection">' + ticketSelection(t) + '</div></div></details></li>';
+    }).reverse().join('');
+    if (focused !== undefined) rows.querySelector('[data-wallet-record="' + focused + '"] > summary')?.focus({ preventScroll: true });
   }
 
   function paintBalance() {

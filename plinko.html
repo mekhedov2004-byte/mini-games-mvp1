@@ -16,8 +16,8 @@
 </script>
 <!-- /Yandex.Metrika counter -->
 <title>Плинко — Лаборатория мини-игр · Национальная Лотерея</title>
-<link rel="stylesheet" href="assets/css/common.css">
-<link rel="stylesheet" href="assets/css/plinko.css">
+<link rel="stylesheet" href="assets/css/common.css?v=1.2.2">
+<link rel="stylesheet" href="assets/css/plinko.css?v=1.2.2">
 <link rel="stylesheet" href="assets/css/archive.css">
 </head>
 <body class="plinko-page">
@@ -44,7 +44,10 @@
           <div class="board-art">
             <canvas id="board" width="600" height="390" aria-label="Доска Плинко"></canvas>
             <ol class="board-slots" id="plBoardSlots" aria-label="Слоты на доске"></ol>
-            <p id="plPurchasedKey" class="board-key" hidden><span aria-hidden="true"></span>Купленные слоты</p>
+            <div class="board-keys">
+              <p id="plSelectedKey" class="board-key" hidden><span aria-hidden="true"></span>Выбранные слоты</p>
+              <p id="plPurchasedKey" class="board-key" hidden><span aria-hidden="true"></span>Купленные слоты</p>
+            </div>
           </div>
           <div class="pl-controls">
             <div class="section-heading">
@@ -79,7 +82,7 @@
         </section>
         <section class="card card-pad feedback-panel">
           <h2>Как вам Плинко?</h2>
-          <p>Перед открытием опроса отключите VPN</p>
+          <p>Перед открытием опроса рекомендуем отключить VPN</p>
           <a class="btn btn-feedback" data-survey target="_blank" rel="noopener"
              data-track="gc_survey_open" data-track-params='{"entry_point":"plinko"}'>Оценить игру</a>
         </section>
@@ -152,10 +155,10 @@
 <script src="assets/js/nl-config.js?v=1.2.1"></script>
 <script src="assets/js/nl-ab.js"></script>
 <script src="assets/js/nl-track.js"></script>
-<script src="assets/js/nl-shell.js"></script>
+<script src="assets/js/nl-shell.js?v=1.2.2"></script>
 <script src="assets/js/nl-rules.js?v=1.2.1"></script>
 <script src="assets/js/nl-draw.js"></script>
 <script src="assets/js/nl-archive.js"></script>
-<script src="assets/js/plinko.js"></script>
+<script src="assets/js/plinko.js?v=1.2.2"></script>
 </body>
 </html>

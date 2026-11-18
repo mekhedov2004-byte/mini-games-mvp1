@@ -9,7 +9,7 @@
   const { fmt } = S;
   const $ = id => document.getElementById(id);
   const NSLOT = P.MULT.length;
-  const ui = { selected: new Set(), stake: 1, buying: false, lastResult: null, drawingTickets: [], purchased: new Set() };
+  const ui = { selected: new Set(), stake: 1, buying: false, lastResult: null, drawingTickets: [], purchased: new Map() };
   const money = amount => fmt(amount) + ' ◆';
   const tier = m => m >= 280 ? 'hot' : (m >= 20 ? 'mid' : 'low');
 
@@ -79,6 +79,7 @@
     $('plAddBtn').disabled = !price || price > balance || ui.buying;
     $('plAddBtn').textContent = price ? 'Купить билет · ' + money(price) : 'Купить билет';
     slots.forEach((button, i) => button.setAttribute('aria-pressed', String(ui.selected.has(i))));
+    paintBoardSlots();
   }
 
   $('plAddBtn').onclick = async function () {
@@ -105,6 +106,7 @@
         }, { throttle: 0 });
       }
       ui.selected.clear();
+      paintPurchased(S.getTickets('plinko').filter(t => !t.resolved));
     } catch (e) {
       receipt = 'Не удалось сохранить билет. Попробуйте ещё раз';
     } finally {
@@ -125,14 +127,27 @@
 
   function paintPurchased(tickets) {
     const active = [...tickets, ...ui.drawingTickets];
-    ui.purchased = new Set(active.flatMap(t => t.bets.map(b => b.slot)));
+    ui.purchased.clear();
+    for (const ticket of active) for (const bet of ticket.bets) {
+      if (!ui.purchased.has(bet.slot)) ui.purchased.set(bet.slot, new Set());
+      ui.purchased.get(bet.slot).add(ticket.targetDraw);
+    }
+    paintBoardSlots();
+  }
+
+  function paintBoardSlots() {
     boardSlots.forEach((item, i) => {
-      const bought = ui.purchased.has(i);
-      item.classList.toggle('purchased', bought);
-      const draws = [...new Set(active.filter(t => t.bets.some(b => b.slot === i)).map(t => t.targetDraw))];
-      item.title = bought ? 'Слот ' + (i + 1) + ' куплен · тираж № ' + draws.map(fmt).join(', ') : '';
-      item.setAttribute('aria-label', bought ? item.title : String(i + 1));
+      const selected = ui.selected.has(i);
+      const draws = ui.purchased.get(i);
+      const label = ['Слот ' + (i + 1)];
+      if (selected) label.push('выбран для билета');
+      if (draws) label.push('куплен · тираж № ' + [...draws].map(fmt).join(', '));
+      item.classList.toggle('selected', selected);
+      item.classList.toggle('purchased', !!draws);
+      item.setAttribute('aria-label', label.join(' · '));
+      item.title = selected || draws ? label.join(' · ') : '';
     });
+    $('plSelectedKey').hidden = !ui.selected.size;
     $('plPurchasedKey').hidden = !ui.purchased.size;
     board.draw();
   }
@@ -222,14 +237,25 @@
 
       boardSlots.forEach((_, i) => {
         const x = xs(i) - SW / 2 + 1.5;
+        const selected = ui.selected.has(i);
         ctx.beginPath();
         ctx.roundRect(x, slotTop, SW - 3, slotBottom - slotTop, [3, 3, 6, 6]);
         const [fill, edge] = i === landedSlot ? ['#225b4d', '#7aebc1']
-          : ui.purchased.has(i) ? ['#532d92', '#c69cff'] : slotColors[i];
+          : ui.purchased.has(i) ? ['#532d92', '#c69cff']
+          : selected ? ['#286485', '#a1eaff'] : slotColors[i];
         ctx.fillStyle = fill;
         ctx.strokeStyle = edge;
         ctx.fill();
         ctx.stroke();
+        if (selected) {
+          ctx.save();
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = '#a1eaff';
+          ctx.shadowColor = '#5ccfff';
+          ctx.shadowBlur = 6;
+          ctx.stroke();
+          ctx.restore();
+        }
         ctx.fillStyle = edge;
         ctx.fillRect(x + 5, slotTop + 4, SW - 13, 1);
       });
@@ -406,7 +432,6 @@
 
   renderTickets([]);
   S.onBalance(refresh);
-  board.draw();
 
   D.init({
     gameId: 'plinko',

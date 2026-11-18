@@ -127,9 +127,11 @@
     PK.suits.forEach(suit => {
       const row = document.createElement('div');
       row.className = 'grid-row';
+      row.setAttribute('role', 'group');
+      row.setAttribute('aria-label', suitNames[suit]);
       const symbol = document.createElement('span');
       symbol.className = 'suit-label' + (PK.redSuits.includes(suit) ? ' red' : '');
-      symbol.textContent = suit;
+      symbol.innerHTML = '<span>' + suit + '</span><span class="suit-name">' + suitNames[suit] + '</span>';
       symbol.setAttribute('aria-hidden', 'true');
       row.appendChild(symbol);
 

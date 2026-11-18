@@ -16,8 +16,8 @@
 </script>
 <!-- /Yandex.Metrika counter -->
 <title>Покер 52 — Лаборатория мини-игр · Национальная Лотерея</title>
-<link rel="stylesheet" href="assets/css/common.css">
-<link rel="stylesheet" href="assets/css/poker.css">
+<link rel="stylesheet" href="assets/css/common.css?v=1.2.2">
+<link rel="stylesheet" href="assets/css/poker.css?v=1.2.2">
 <link rel="stylesheet" href="assets/css/archive.css">
 </head>
 <body class="poker-page">
@@ -45,10 +45,10 @@
         <section class="card card-pad poker-panel" id="panelMain">
           <header class="section-heading">
             <h2>Основная игра</h2>
-            <p>Выберите от 5 до 10 карт. Даже одно совпадение с картами тиража приносит выигрыш</p>
+            <p>Выберите от 5 до 10 карт любых мастей. Можно взять несколько карт одной масти. Даже одно совпадение с картами тиража приносит выигрыш</p>
           </header>
           <div class="selection-toolbar">
-            <span id="mainCount">Выбрано 0 из 10</span>
+            <span id="mainCount" aria-live="polite">Выбрано 0 из 10</span>
             <div class="selection-actions">
               <button class="btn btn-ghost btn-mini" id="pkMainRandom">⚄ Случайно</button>
               <button class="btn btn-ghost btn-mini" id="pkMainClear"><span class="eraser" aria-hidden="true"></span>Очистить</button>
@@ -143,7 +143,7 @@
     <div class="rule-grid">
       <article class="card card-pad">
         <h3>Основная игра</h3>
-        <p>Выберите от 5 до 10 карт из колоды или нажмите «Случайно». Купите билет и дождитесь тиража</p>
+        <p>Выберите от 5 до 10 карт любых мастей или нажмите «Случайно». Купите билет и дождитесь тиража</p>
         <div id="pkMatchExample" class="mini-row rule-example"></div>
         <p><strong>Как выиграть.</strong> Вы выиграли, если ваши карты полностью или частично совпали с пятью картами, которые выпадут в ходе розыгрыша</p>
       </article>
@@ -222,10 +222,10 @@
 <script src="assets/js/nl-config.js?v=1.2.1"></script>
 <script src="assets/js/nl-ab.js"></script>
 <script src="assets/js/nl-track.js"></script>
-<script src="assets/js/nl-shell.js"></script>
+<script src="assets/js/nl-shell.js?v=1.2.2"></script>
 <script src="assets/js/nl-rules.js?v=1.2.1"></script>
 <script src="assets/js/nl-draw.js"></script>
 <script src="assets/js/nl-archive.js"></script>
-<script src="assets/js/poker.js?v=1.2.1"></script>
+<script src="assets/js/poker.js?v=1.2.2"></script>
 </body>
 </html>

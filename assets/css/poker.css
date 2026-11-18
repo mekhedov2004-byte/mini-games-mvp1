@@ -13,6 +13,7 @@
 #cardsGrid { display: grid; gap: 5px; padding: 9px; background: radial-gradient(ellipse at 50% 0%, #261940, var(--well) 72%); border: 1px solid var(--line); border-radius: 13px; }
 .grid-row { display: grid; grid-template-columns: 20px repeat(13, minmax(0, 1fr)); gap: 4px; }
 .suit-label { display: grid; place-items: center; font-size: 20px; font-weight: 700; color: #dcd0ed; }
+.suit-label .suit-name { display: none; }
 .grid-card {
   min-width: 0; display: grid; place-content: center; gap: 2px;
   min-height: clamp(43px, 5vw, 57px); padding: 2px 0; line-height: 1;
@@ -252,21 +253,19 @@
 .draw-payout { font-size: clamp(22px, 4vw, 30px); white-space: nowrap; }
 .replay-row { gap: 8px; }
 
+@media (max-width: 600px) {
+  #cardsGrid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; padding: 6px; }
+  .grid-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .suit-label { display: flex; justify-content: center; min-height: 28px; gap: 3px; font-size: 16px; }
+  .suit-label .suit-name { display: inline; font-size: 11px; text-transform: capitalize; }
+  .grid-card { grid-auto-flow: column; align-items: center; min-height: 40px; gap: 5px; }
+  .grid-card span { font-size: 14px; }
+  .selection-toolbar { flex-wrap: wrap; }
+}
 @media (max-width: 540px) {
-  #cardsGrid { gap: 4px; padding: 5px; }
-  .grid-row { grid-template-columns: 12px repeat(13, minmax(0, 1fr)); gap: 2px; }
-  .suit-label { font-size: 13px; }
-  .grid-card { font-size: 11px; min-height: 39px; border-radius: 4px; }
-  .grid-card span { font-size: 12px; }
   .archive-row .mini-row { gap: 3px; }
   .archive-row .mini-card { width: 23px; height: 31px; font-size: 10px; }
   .archive-row .mini-card span { font-size: 12px; }
-}
-@media (max-width: 460px) {
-  #cardsGrid { gap: 8px; }
-  .grid-row { grid-template-columns: 15px repeat(7, minmax(0, 1fr)); gap: 3px; }
-  .suit-label { grid-row: span 2; font-size: 15px; }
-  .grid-card { font-size: 12px; min-height: 39px; }
 }
 @media (max-width: 370px) {
   .nl-table td, .nl-table th { padding-inline: 5px; }
