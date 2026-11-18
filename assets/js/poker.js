@@ -359,7 +359,7 @@
     ui.revealed.add(ticket.id);
     const verdict = slide.querySelector('.hand-verdict');
     const condition = possible
-      ? 'Если цвет первой карты тиража совпадёт с вашим прогнозом, вам начислят выигрыш'
+      ? 'Если первая карта тиража будет ' + (bet.color === 'red' ? 'красной' : 'чёрной') + ', вы получите выигрыш'
       : 'В билете нет выигрышных комбинаций';
     verdict.innerHTML = '<div><span>Лучшая комбинация</span><strong>' + best.name +
       '</strong></div><div><span>Возможный выигрыш</span><strong>' + money(possible) +
