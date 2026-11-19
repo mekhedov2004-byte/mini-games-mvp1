@@ -245,7 +245,7 @@ window.NLShell = (function () {
     host.className = 'nl-header';
     host.innerHTML =
       '<a class="nl-logo" href="index.html" data-track="gc_return_to_hub">' +
-        '<span class="mark">НЛ</span><span class="name">ЛАБОРАТОРИЯ МИНИ-ИГР</span>' +
+        '<span class="mark">НЛ</span><span class="name">' + CFG.hubName + '</span>' +
       '</a>' +
       // Явный выход в хаб из игры. На самом хабе не показываем.
       (opts.gameId && opts.gameId !== 'hub'
